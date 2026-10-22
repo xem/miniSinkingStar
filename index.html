@@ -1,0 +1,425 @@
+<!doctype html>
+<body style="font:12px arial, sans-serif">
+<h3>MiniSinkingStar</h3>
+<p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
+<br>Minified size: 756b zipped (engine only), or ~ 1.2kb (full demo).
+
+<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">levels = [ /*...*/ ]; currentlevel = 0;
+parse=()=>{/* read level data, create map, obj, hero objects, set yellowpressed = lastyellowpressed = 0 = win = die = 0 */};
+draw=()=>{/* render the scene */};
+onkeydown=o=>{"r"==o.key&&(parse(),draw());var r,e,a,i,p,b=[];if(x=hero.x,y=hero.y,dir={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}}[o.key],!win&&!die&&dir){for(r=y+dir.y,e=x+dir.x,p=0;p&lt;99&&(1!=map[r]?.[e]&&5!=map[r]?.[e]&&7!=map[r]?.[e]&&"e"!=map[r]?.[e]);r+=dir.y,e+=dir.x,p++)if(0==obj[r]?.[e]){for(a=r,i=e;a!=y||i!=x;a-=dir.y,i-=dir.x)obj[a][i]=obj[a-dir.y][i-dir.x];hero.y+=dir.y,hero.x+=dir.x;break}for(e in obj)for(r in obj[e]){if(8==obj[e][r])for(a of[{x:r-1,y:e},{x:+r+1,y:e},{x:r,y:e-1},{x:r,y:+e+1}])8!=obj[a.y]?.[a.x]&&"a"!=obj[a.y]?.[a.x]&&"b"!=obj[a.y]?.[a.x]&&"c"!=obj[a.y]?.[a.x]&&"d"!=obj[a.y]?.[a.x]||b.push(a),hero.y==a.y&&hero.x==a.x&&(die=1);if("a"==obj[e][r])for(a=e-1,p=0;p&lt;99&&(1!=map[a]?.[r]&&5!=map[a]?.[r]&&7!=map[a]?.[r]&&"e"!=map[a]?.[r]&&3!=obj[a]?.[r]);a--,p++){if(obj[a]?.[r]&&3!=obj[a]?.[r]){b.push({x:r,y:a});break}if(a==hero.y&&r==hero.x){die=1;break}}else if("b"==obj[e][r])for(i=r+1,p=0;p&lt;99&&(1!=map[e]?.[i]&&5!=map[e]?.[i]&&7!=map[e]?.[i]&&"e"!=map[e]?.[i]&&3!=obj[e]?.[i]);i++,p++){if(obj[e][i]&&3!=obj[e]?.[i]){b.push({x:i,y:e});break}if(e==hero.y&&i==hero.x){die=1;break}}}for(e in 2==map[hero.y][hero.x]&&(win=1),yellowpressed=1,map)for(r in map[e])4!=map[e][r]||0!=obj[e][r]||hero.x==r&&hero.y==e||(yellowpressed=0);if(yellowpressed!=lastyellowpressed)for(e in map)for(r in map[e])5==map[e][r]?map[e][r]=6:6==map[e][r]&&(map[e][r]=5);for(r of(lastyellowpressed=yellowpressed,b))obj[r.y][r.x]=0;for(e in p=1,obj)for(r in obj[e])8!=obj[e][r]&&"a"!=obj[e][r]&&"b"!=obj[e][r]&&"c"!=obj[e][r]&&"d"!=obj[e][r]||(p=0);if(1==p)for(e in map)for(r in map[e])"e"==map[e][r]&&(map[e][r]="f");draw()}}</pre>
+
+<p>
+<b>Demo:</b>
+
+<p>- You are the red square
+<br>- Use Arrow keys to play and R to reset
+<br>- You need to reach the blue exit
+<br>- You can push the grey blocks
+<br>- Activate yellow buttons to toggle orange obstacles
+<br>- Goblins (brown squares) kill dragons and goblins around them (not in diagonal)
+<br>- Dragons (brown triangles) kill creatures placed in front of them (only one per move)
+<br>- Pink obstacles disappear when all enemies are neutralized
+
+<p>
+<button onclick="parse(currentlevel=0);draw()">Level 0</button> 
+<button onclick="parse(currentlevel=1);draw()">Level 1</button>
+<button onclick="parse(currentlevel=2);draw()">Level 2</button>
+<button onclick="parse(currentlevel=3);draw()">Level 3</button>
+<button onclick="parse(currentlevel=4);draw()">Level 4</button>
+<button onclick="parse(currentlevel=5);draw()">Level 5</button>
+<button onclick="parse(currentlevel=6);draw()">Level 6</button>
+
+<p>
+<canvas id=a style="border:9px solid;background:#000;transform-origin:top left;transform:scale(3)">
+<script>
+// Map:
+// 0: ground
+// 1: wall
+// 2: exit
+// 3: crystal
+// 4: button
+// 5: toggle obstacle closed
+// 6: toggle obstacle open
+// 7: tree
+// 8: goblin
+// 9: hero
+// a: dragon up
+// b: dragon right
+// c: dragon down
+// d: dragon left
+// e: enemies alive obstacle closed
+// f: enemies alive obstacle open
+
+c = a.getContext`2d`;
+
+levels = [
+
+// 0: Heroes 1-21
+`00010003000
+09010001020
+00030001000`,
+
+// 1: Heroes 1-20
+`00010001000
+90330000033
+00010001000
+11111111131
+00010001000
+02300333300
+00010001000`,
+
+// 2: Heroes 1-19
+`00010001000
+94000301020
+00010005000`,
+
+// 3: Heroes 1-18
+`0000012
+0930015
+0330000
+0007000
+7404040
+0000000`,
+
+// 4: Heroes 2-25
+`10000000008
+00000000000
+90000800102
+00000000000
+10000000008`,
+
+// 5: Heroes 2-21
+`12000000000
+10000000000
+b0000000000
+10000010000
+10000011811
+10000010300
+111a1110009`,
+
+// 6: Heroes 2-11
+`00000001000
+00000001020
+09308001000
+000030011e1
+80000000001`
+];
+
+currentlevel = 0;
+
+// Parse level
+parse = () => {
+  var x, y, cell;
+  map = [];
+  obj = [];
+  win = 0;
+  die = 0;
+  deaths = [];
+  yellowpressed = 0;
+  lastyellowpressed = 0;
+  level = levels[currentlevel].split("\n");
+  for(y = 0; y < level.length; y++){
+    map[y] = [];
+    obj[y] = [];
+    line = level[y];
+    for(x = 0; x < line.length; x++){
+      cell = line[x];
+      map[y][x] = 0;
+      obj[y][x] = 0;
+      if(cell == 9) hero = {x,y}; // hero
+      else if(cell == 3) obj[y][x] = cell; // crystal
+      else if(cell == 8) obj[y][x] = cell; // goblin
+      else if(cell == "a") obj[y][x] = cell; // goblin up
+      else if(cell == "b") obj[y][x] = cell; // goblin right
+      else if(cell == "c") obj[y][x] = cell; // goblin down (todo)
+      else if(cell == "d") obj[y][x] = cell; // goblin left(todo)
+      else map[y][x] = cell; // map
+    }
+  }
+}
+
+// Draw scene
+draw = () => {
+
+  var x, y;
+
+  a.width = map[0].length*9;
+  a.height = map.length*9;
+  
+  // Map
+  for(y in map){
+    for(x in map[y]){
+      if(map[y][x] == 0) c.fillStyle = "#ddd"; // ground
+      else if(map[y][x] == 1) c.fillStyle = "#000"; // wall
+      else if(map[y][x] == 2) c.fillStyle = "#abf"; // exit
+      else if(map[y][x] == 4) c.fillStyle = "#fd3"; // button
+      else if(map[y][x] == 5) c.fillStyle = "#fa2"; // toggle on
+      else if(map[y][x] == 6) c.fillStyle = "#fa2"; // toggle off
+      else if(map[y][x] == 7) c.fillStyle = "#474"; // tree
+      else if(map[y][x] == "e") c.fillStyle = "#f8a"; // enemies obstacle open
+      else if(map[y][x] == "f") c.fillStyle = "#f8a"; // enemies obstacle closed
+      c.fillRect(x*9,y*9,9,9);
+      
+      if(map[y][x] == 6 || map[y][x] == "f"){
+        c.fillStyle = "#ddd";
+        c.fillRect(x*9+1,y*9+1,7,7);
+      }
+    }
+  }
+  
+  // Objects
+  for(y in obj){
+    for(x in obj[y]){
+      c.fillStyle = "#0000";
+      if(obj[y][x] == "a"){ // dragon up
+        c.fillStyle = "#531";
+        c.moveTo(x*9+1, y*9+8);
+        c.lineTo(x*9+4.5, y*9+1);
+        c.lineTo(x*9+8, y*9+8);
+        c.fill();
+      }
+      else if(obj[y][x] == "b"){ // dragon right
+        c.fillStyle = "#531";
+        c.moveTo(x*9+1, y*9+1);
+        c.lineTo(x*9+8, y*9+4.5);
+        c.lineTo(x*9+1, y*9+8);
+        c.fill();
+      }
+      else {
+        if(obj[y][x] == 3) c.fillStyle = "#888"; // crate
+        else if(obj[y][x] == 8) c.fillStyle = "#531"; // goblin
+        c.fillRect(x*9+1,y*9+1,7,7);
+      }
+    }
+  }
+  
+  // Hero
+  c.fillStyle = die ? "#333" : win ? "#3c3" : "#f33";
+  c.fillRect(hero.x*9+1,hero.y*9+1,7,7);
+}
+
+// Keyboard input
+onkeydown = e => {
+
+  // R = Reset
+  if(e.key == "r"){
+    parse();
+    draw();
+  }
+  
+  // Z = undo (todo)
+  
+  var i, j, k, l, t,
+  
+  // Reset deaths list
+  deaths = [];
+  
+  // Get hero position
+  x = hero.x, y = hero.y,
+  
+  // Get arrow direction
+  dir = {ArrowUp: {x:0,y:-1}, ArrowDown: {x:0,y:1}, ArrowLeft: {x:-1,y:0}, ArrowRight: {x:1,y:0}}[e.key];
+  
+  // arrow key pressed: move hero (and push objects)
+  if(!win && !die && dir){
+  
+    // see all the cells in the hero's target direction
+    for(
+      i = y + dir.y, j = x + dir.x, t = 0;
+      t < 99;
+      i = i + dir.y, j = j + dir.x, t++
+    ){
+      
+      // if we encounter a wall (1), toggle obstacle (5), tree (7), enemy obstacle (e): stop
+      if(
+        map[i]?.[j] == 1
+        || map[i]?.[j] == 5
+        || map[i]?.[j] == 7
+        || map[i]?.[j] == "e"
+      ){
+        break;
+      }
+
+      // if we find an empty cell (no object), we can move/push
+      else if(obj[i]?.[j] == 0){
+      
+        // backtrack all the cells up to the hero
+        for(k = i, l = j; k != y || l != x; k -= dir.y, l -= dir.x){
+        
+          // push objects away from the hero
+          obj[k][l] = obj[k - dir.y][l - dir.x];
+        }
+        
+        // move hero
+        hero.y += dir.y;
+        hero.x += dir.x;
+        
+        // stop loop
+        break;
+      }
+    }
+    
+    // if the hero, or another enemy
+    // moves next to a goblin or in front of a dragon, it dies.
+    // watch all the map
+    for(j in obj){
+      for(i in obj[j]){
+      
+        // If there's a goblin:
+        if(obj[j][i] == 8){
+          for(k of [{x:i-1,y:j},{x:+i+1,y:j},{x:i,y:j-1},{x:i,y:+j+1}]){
+          
+            // Kill goblins / dragons around
+            if(
+              obj[k.y]?.[k.x] == 8
+              || obj[k.y]?.[k.x] == "a"
+              || obj[k.y]?.[k.x] == "b"
+              || obj[k.y]?.[k.x] == "c"
+              || obj[k.y]?.[k.x] == "d"
+            ){
+              deaths.push(k);
+            }
+            
+            // Kill hero around
+            if(hero.y == k.y && hero.x == k.x){
+              die = 1;
+            }
+          }
+        }
+        
+      
+        // Dragon up
+        if(obj[j][i] == "a"){
+        
+          // See all the cells above the dragon
+          for(k = j - 1, t = 0; t < 99; k--, t++){
+          
+            // Stop on solid tiles or crystal
+            if(
+              map[k]?.[i] == 1
+              || map[k]?.[i] == 5
+              || map[k]?.[i] == 7
+              || map[k]?.[i] == "e"
+              || obj[k]?.[i] == 3
+            ){
+              break;
+            }
+            
+            // destroy other enemies (any object except crystal)
+            if(obj[k]?.[i] && obj[k]?.[i] != 3){ 
+              deaths.push({x:i,y:k});
+              break;
+            }
+            
+            // kill hero
+            if(k == hero.y && i == hero.x){
+              die = 1;
+              break;
+            }
+          }
+        }
+        
+        // Dragon right
+        else if(obj[j][i] == "b"){
+        
+          // See all the cells on the right side of the dragon
+          for(l = i + 1, t = 0; t < 99; l++, t++){
+          
+            // Stop on solid tiles or crystal
+            if(
+              map[j]?.[l] == 1
+              || map[j]?.[l] == 5
+              || map[j]?.[l] == 7
+              || map[j]?.[l] == "e"
+              || obj[j]?.[l] == 3
+            ){
+              break;
+            }
+            
+            // destroy other enemies (any object except crystal)
+            if(obj[j][l] && obj[j]?.[l] != 3){ 
+              deaths.push({x:l,y:j});
+              break;
+            }
+            
+            // kill hero
+            if(j == hero.y && l == hero.x){
+              die = 1;
+              break
+            }
+          }
+        }
+        
+        // Dragon down (todo)
+        // Dragon left (todo)
+      }
+    }
+    
+    // if target cell is an exit
+    if(map[hero.y][hero.x] == 2){
+      
+      // win
+      win = 1;
+    }
+    
+    // check if all yellow buttons are pressed
+    yellowpressed = 1;
+    for(j in map){
+      for(i in map[j]){
+        if(map[j][i] == 4 && (obj[j][i] == 0 && !(hero.x == i && hero.y == j))){
+          yellowpressed = 0;
+        }
+      }
+    }
+    
+    // toggle orange obstacles if yellow buttons status changed
+    if(yellowpressed != lastyellowpressed){
+      for(j in map){
+        for(i in map[j]){
+          if(map[j][i] == 5) map[j][i] = 6;
+          else if(map[j][i] == 6) map[j][i] = 5;
+        }
+      }
+    }
+    
+    // save yellow button status
+    lastyellowpressed = yellowpressed;
+    
+    // Apply enemies deaths
+    for(i of deaths){
+      obj[i.y][i.x] = 0;
+    }
+    
+    // check enemies presence
+    t = 1;
+    for(j in obj){
+      for(i in obj[j]){
+        if(
+          obj[j][i] == 8
+          || obj[j][i] == "a"
+          || obj[j][i] == "b"
+          || obj[j][i] == "c"
+          || obj[j][i] == "d"
+        ){
+          t = 0;
+        }
+      }
+    }
+    
+    // if there are no enemies, clear enemies obstacles
+    if(t == 1){
+      for(j in map){
+        for(i in map[j]){
+          if(map[j][i] == "e") map[j][i] = "f";
+        }
+      }
+    }
+    
+    draw();
+  }
+}
+currentlevel = 6;
+parse();
+draw();
+</script>
