@@ -1,23 +1,23 @@
 ﻿<!doctype html>
 <body style="font:12px arial, sans-serif">
 <h3>MiniSinkingStar</h3>
-<p>Tiny "Sinking Star Hes Wizard" implementation in HTML+JS.
-<br>Size: 701b zipped (engine only) / 1.1kb (full demo).
+<p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
+<br>Size: 688b zipped (engine only) / 1.2kb (full demo).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
 <p><a href="//github.com/xem/miniSinkingStar" target=_blank>Full source on Github</a>
 <pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">parse=()=>{/* read level data, create objects, set globals */};
 draw=()=>{/* render the scene */};
-onkeydown=(y,f,x,r,o,e,i,n,d=0,u=H.x,s=H.y,a=[{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}],c=a[y.keyCode-37],k=[])=>{if("r"==y.key?parse():"z"==y.key&&U.length>1&&(U.pop(),[M,O,H,L,W,D]=structuredClone(U[U.length-1])),!W&&!D&&c){for(f=s+c.y,x=u+c.x,e=0;e&lt;99&&!"1467".includes(M[f]?.[x]);f+=c.y,x+=c.x,e++)if(0==O[f]?.[x]){for(r=f,o=x;r!=s||o!=u;r-=c.y,o-=c.x)O[r][o]=O[r-c.y][o-c.x];H.y+=c.y,H.x+=c.x;break}for(x in O)for(f in O[x]){if("f"==O[x][f])for(r of(d++,a))e=O[+x+r.y]?.[+f+r.x],"abcdf".includes(e)&&k.push({x:+f+r.x,y:+x+r.y}),H.y==+x+r.y&&H.x==+f+r.x&&(D=1);if(i=a[{d:0,a:1,b:2,c:3}[O[x][f]]])for(d++,r=+x+i.y,o=+f+i.x,e=0;e&lt;99&&(n=M[r]?.[o],!"1467".includes(n)&&"e"!=O[r]?.[o]);r+=i.y,o+=i.x,e++){if(O[r]?.[o]){k.push({x:o,y:r});break}if(H.y==r&&H.x==o){D=1;break}}}for(x in 2==M[H.y][H.x]&&(W=1),Y=1,M)for(f in M[x])3!=M[x][f]||0!=O[x][f]||H.x==f&&H.y==x||(Y=0);if(Y!=L)for(x in M)for(f in M[x])4!=M[x][f]&&5!=M[x][f]||(M[x][f]=9-M[x][f]);for(f of(L=Y,k))O[f.y][f.x]&&(d--,O[f.y][f.x]=0);if(!d)for(x in M)for(f in M[x])7==M[x][f]&&(M[x][f]=8);U.push(structuredClone([M,O,H,L,W,D]))}draw()}</pre>
+onkeydown=(e,f,r,i,o,y,n,x,s,l=0,u=H.x,d=H.y,k=[-1,0,1,0],p=[0,-1,0,1],t={x:k[e.keyCode-37],y:p[e.keyCode-37]},a=[])=>{if("r"==e.key)parse();else if("z"==e.key&&U.length>1)U.pop(),[M,O,H,L,W,D]=structuredClone(U[U.length-1]);else if(!W&&!D&&t){for(y=1;y&lt;99&&(r=d+y*t.y,f=u+y*t.x,!"1467".includes(M[r]?.[f]));y++)if(0==O[r]?.[f]){for(;y--;)r=d+y*t.y,f=u+y*t.x,O[r+t.y][f+t.x]=O[r][f];H.y+=t.y,H.x+=t.x;break}for(r in O)for(f in O[r])if(O[r][f])if(5==O[r][f])for(l++,i=0;i&lt;4;i++)y=+r+p[i],n=+f+k[i],o=O[y]?.[n],o&lt;6&&a.push({x:n,y:y}),H.y==y&&H.x==n&&(D=1);else if(O[r][f]&lt;5)for(i=p[O[r][f]],o=k[O[r][f]],l++,y=1;y&lt;99&&(x=+r+y*i,s=+f+y*o,!"1467".includes(M[x]?.[s])&&6!=O[x]?.[s]);y++){if(O[x]?.[s]&&O[x]?.[s]&lt;6){a.push({x:s,y:x});break}if(H.y==x&&H.x==s){D=1;break}}for(r in 2==M[H.y][H.x]&&(W=1),Y=1,M)for(f in M[r])3!=M[r][f]||0!=O[r][f]||H.x==f&&H.y==r||(Y=0);if(Y!=L)for(r in M)for(f in M[r])4!=M[r][f]&&5!=M[r][f]||(M[r][f]=9-M[r][f]);for(f of(L=Y,a))O[f.y]?.[f.x]&&(l--,O[f.y][f.x]=0);if(!l)for(r in M)for(f in M[r])7==M[r][f]&&(M[r][f]=8);U.push(structuredClone([M,O,H,L,W,D]))}draw()}</pre>
 
 </details>
 
 <p>
 <p><details><summary><b>Rules</b></summary>
-<p>- You are the red square
-<br>- You need to reach the blue exit
-<br>- You can push the grey blocks (even many at once)
+<p>- You are the hero (red square)
+<br>- You need to reach the exit (blue square)
+<br>- You can push the grey blocks
 <br>- Activate yellow buttons to toggle orange obstacles
 <br>- Goblins (brown squares) kill creatures around them (not in diagonal)
 <br>- Dragons (brown triangles) kill creatures placed in front of them (only one per move)
@@ -116,7 +116,6 @@ p = 0;
 
 // Parse level
 parse = (x, y, cell, level = P[p].split`\n`) => {
-  U = []; // undo
   M = []; // map
   O = []; // objects
   W =  // win
@@ -132,11 +131,11 @@ parse = (x, y, cell, level = P[p].split`\n`) => {
       M[y][x] = 0;
       O[y][x] = 0;
       if(cell == "A") H = {x,y}; // Hero
-      else if("abcdef".includes(cell)) O[y][x] = " abcdef".indexOf(cell); // Objects
-      else M[y][x] = +cell; // Map
+      else if(cell < 9) M[y][x] = +cell; // Map
+      else O[y][x] = " abcdef".indexOf(cell); // Objects
     }
   }
-  U.push([structuredClone(M), structuredClone(O), structuredClone(H), L, W, D]); // save current state in history
+  U = [structuredClone([M, O, H, L, W, D])]; // init undo history
 }
 
 // Draw scene
@@ -200,16 +199,20 @@ draw = (x, y, cell) => {
 onkeydown = (
   
   // Event/loop/temp vars
-  e, i, j, k, l, t, u, E = 0,
+  e, i, j, k, l, t, u, v, w,
+  
+  // Enemy counter
+  E = 0,
 
   // Hero position
   x = H.x, y = H.y,
 
-  // 4 directions
-  dirs = [{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}],
+  // 4 directions (X,Y offsets)
+  dirsx = [-1,0,1,0],
+  dirsy = [0,-1,0,1],
   
-  // Arrow key direction
-  dir = dirs[e.keyCode-37],
+  // Get arrow key direction
+  dir = {x:dirsx[e.keyCode-37], y: dirsy[e.keyCode-37]},
   
   // Fatalities list
   F = []
@@ -228,32 +231,32 @@ onkeydown = (
   }
   
   // Arrow key pressed: move hero (and push objects) if possible
-  if(!W && !D && dir){
+  else if(!W && !D && dir){
   
     // Loop on all the cells in the hero's target direction
-    for(
-      i = y + dir.y, j = x + dir.x, t = 0;
-      t < 99;
-      i = i + dir.y, j = j + dir.x, t++
-    ){
+    for(t = 1; t < 99; t++){
+    
+      // Cell coordinates
+      j = y + t * dir.y;
+      i = x + t * dir.x;
       
       // If we encounter a wall (1), toggle obstacle (4), tree (6), enemy obstacle (7): stop
-      if("1467".includes(M[i]?.[j])){
+      if("1467".includes(M[j]?.[i])){
         break;
       }
 
-      // if we find an empty cell (any other map item + no object), we can move/push
-      else if(O[i]?.[j] == 0){
+      // If we find an empty cell (any other map item + no object): move
+      else if(O[j]?.[i] == 0){
       
         // Backtrack all the cells up to the hero
-        for(
-          k = i, l = j;
-          k != y || l != x;
-          k -= dir.y, l -= dir.x
-        ){
+        for(;t--;){
+        
+          // Cell coordinates
+          j = y + t * dir.y;
+          i = x + t * dir.x;
         
           // Push objects away from the hero
-          O[k][l] = O[k - dir.y][l - dir.x];
+          O[j + dir.y][i + dir.x] = O[j][i];
         }
         
         // Move hero
@@ -265,64 +268,72 @@ onkeydown = (
       }
     }
     
-    // Enemies attacks
-    // loop on all the objects
+    // Enemies: loop on all the objects
     for(j in O){
       for(i in O[j]){
       
+        // If there's an object in the current cell
         if(O[j][i]){
       
-          // If there's a goblin
+          // If it's a goblin
           if(O[j][i] == 5){
           
-            // Count enemy
+            // Update enemy counter
             E++;
             
-            for(k of dirs){
+            // Watch in 4 directions
+            for(k = 0; k < 4; k++){
+
+              // Coordinates
+              t = +j + dirsy[k];
+              u = +i + dirsx[k];
+              
+              // Object
+              l = O[t]?.[u];
             
-              t = O[+j+k.y]?.[+i+k.x];
-            
-              // Kill goblins / dragons around (in all 4 directions)
-              if(t < 6){
-                F.push({x: +i+k.x, y: +j+k.y});
+              // Kill goblins / dragons (l = 1-5)
+              if(l < 6){
+                F.push({x: u, y: t});
               }
               
               // Kill hero
-              if(H.y == +j+k.y && H.x == +i+k.x){
+              if(H.y == t && H.x == u){
                 D = 1;
               }
             }
           }
 
-          // If there's a dragon
+          // If it's a dragon
           else if(O[j][i] < 5){
           
             // Get dragon direction
-            u = dirs[O[j][i]];
+            k = dirsy[O[j][i]];
+            l = dirsx[O[j][i]];
           
-            // Count enemy
+            // Update enemy counter
             E++;
           
             // Loop on all the cells in the dragon's direction
-            for(
-              k = +j + u.y, l = +i + u.x, t = 0;
-              t < 99;
-              k += u.y, l += u.x, t++
-            ){
+            for(t = 1; t < 99; t++){
 
-              // Stop on solid tiles or crystal
-              if("1467".includes(M[k]?.[l]) || O[k]?.[l] == 6){
+              // Cell coordinates
+              v = +j + t * k;
+              w = +i + t * l;
+
+              // Stop on solid tiles (map=1,4,6,7) or crystal (object=6)
+              if("1467".includes(M[v]?.[w]) || O[v]?.[w] == 6){
                 break;
               }
               
               // Destroy other enemies (= any non-zero object)
-              if(O[k]?.[l] && O[k]?.[l] < 6){
-                F.push({x:l,y:k});
+              if(O[v]?.[w] && O[v]?.[w] < 6){
+                F.push({x:w, y:v});
                 break;
               }
               
+              
               // Kill hero
-              if(H.y == k && H.x == l){
+              if(H.y == v && H.x == w){
                 D = 1;
                 break;
               }
@@ -332,7 +343,7 @@ onkeydown = (
       }
     }
     
-    // If target cell is an exit
+    // If hero's new cell is an exit
     if(M[H.y][H.x] == 2){
       
       // Win
@@ -358,12 +369,12 @@ onkeydown = (
       }
     }
     
-    // Save yellow button status
+    // Save toggle buttons status
     L = Y;
     
     // Apply enemies fatalities
     for(i of F){
-      if(O[i.y][i.x]){
+      if(O[i.y]?.[i.x]){
         E--;
         O[i.y][i.x] = 0;
       }
