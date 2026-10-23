@@ -2,14 +2,14 @@
 <body style="font:12px arial, sans-serif">
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Hes Wizard" implementation in HTML+JS.
-<br>Size: 706b zipped (engine only) / 1.1kb (full demo).
+<br>Size: 701b zipped (engine only) / 1.1kb (full demo).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
 <p><a href="//github.com/xem/miniSinkingStar" target=_blank>Full source on Github</a>
 <pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">parse=()=>{/* read level data, create objects, set globals */};
 draw=()=>{/* render the scene */};
-onkeydown=(r,y,f,e,o,x,i,n,d=0,s=H.x,u=H.y,a=[{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}],c=a[r.keyCode-37],k=[])=>{if("r"==r.key?parse():"z"==r.key&&U.length>1&&(U.pop(),[M,O,H,L,W,D]=structuredClone(U[U.length-1])),!W&&!D&&c){for(y=u+c.y,f=s+c.x,x=0;x&lt;99&&!"157e".includes(M[y]?.[f]);y+=c.y,f+=c.x,x++)if(0==O[y]?.[f]){for(e=y,o=f;e!=u||o!=s;e-=c.y,o-=c.x)O[e][o]=O[e-c.y][o-c.x];H.y+=c.y,H.x+=c.x;break}for(f in O)for(y in O[f]){if(8==O[f][y])for(e of(d++,a))x=O[+f+e.y]?.[+y+e.x],"8abcd".includes(x)&&k.push({x:+y+e.x,y:+f+e.y}),u==+f+e.y&&s==+y+e.x&&(D=1);if(i=a[{d:0,a:1,b:2,c:3}[O[f][y]]])for(d++,e=+f+i.y,o=+y+i.x,x=0;x&lt;99&&(n=M[e]?.[o],!"157e".includes(n)&&3!=O[e]?.[o]);e+=i.y,o+=i.x,x++){if(O[e]?.[o]){k.push({x:o,y:e});break}if(u==e&&s==o){D=1;break}}}for(f in 2==M[u][s]&&(W=1),Y=1,M)for(y in M[f])4!=M[f][y]||0!=O[f][y]||H.x==y&&H.y==f||(Y=0);if(Y!=L)for(f in M)for(y in M[f])5!=M[f][y]&&6!=M[f][y]||(M[f][y]=11-M[f][y]);for(y of(L=Y,k))O[y.y][y.x]&&(d--,O[y.y][y.x]=0);if(!d)for(f in M)for(y in M[f])"e"==M[f][y]&&(M[f][y]="f");U.push(structuredClone([M,O,H,L,W,D]))}draw()}</pre>
+onkeydown=(y,f,x,r,o,e,i,n,d=0,u=H.x,s=H.y,a=[{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}],c=a[y.keyCode-37],k=[])=>{if("r"==y.key?parse():"z"==y.key&&U.length>1&&(U.pop(),[M,O,H,L,W,D]=structuredClone(U[U.length-1])),!W&&!D&&c){for(f=s+c.y,x=u+c.x,e=0;e&lt;99&&!"1467".includes(M[f]?.[x]);f+=c.y,x+=c.x,e++)if(0==O[f]?.[x]){for(r=f,o=x;r!=s||o!=u;r-=c.y,o-=c.x)O[r][o]=O[r-c.y][o-c.x];H.y+=c.y,H.x+=c.x;break}for(x in O)for(f in O[x]){if("f"==O[x][f])for(r of(d++,a))e=O[+x+r.y]?.[+f+r.x],"abcdf".includes(e)&&k.push({x:+f+r.x,y:+x+r.y}),H.y==+x+r.y&&H.x==+f+r.x&&(D=1);if(i=a[{d:0,a:1,b:2,c:3}[O[x][f]]])for(d++,r=+x+i.y,o=+f+i.x,e=0;e&lt;99&&(n=M[r]?.[o],!"1467".includes(n)&&"e"!=O[r]?.[o]);r+=i.y,o+=i.x,e++){if(O[r]?.[o]){k.push({x:o,y:r});break}if(H.y==r&&H.x==o){D=1;break}}}for(x in 2==M[H.y][H.x]&&(W=1),Y=1,M)for(f in M[x])3!=M[x][f]||0!=O[x][f]||H.x==f&&H.y==x||(Y=0);if(Y!=L)for(x in M)for(f in M[x])4!=M[x][f]&&5!=M[x][f]||(M[x][f]=9-M[x][f]);for(f of(L=Y,k))O[f.y][f.x]&&(d--,O[f.y][f.x]=0);if(!d)for(x in M)for(f in M[x])7==M[x][f]&&(M[x][f]=8);U.push(structuredClone([M,O,H,L,W,D]))}draw()}</pre>
 
 </details>
 
@@ -41,19 +41,19 @@ onkeydown=(r,y,f,e,o,x,i,n,d=0,s=H.x,u=H.y,a=[{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x
 // 0: ground
 // 1: wall
 // 2: exit
-// 3: crystal
-// 4: button
-// 5: toggle obstacle closed
-// 6: toggle obstacle open
-// 7: tree
-// 8: goblin
-// 9: hero
-// a: dragon up
-// b: dragon right
-// c: dragon down
-// d: dragon left
-// e: enemies alive obstacle closed
-// f: enemies alive obstacle open
+// 3: button
+// 4: toggle obstacle closed
+// 5: toggle obstacle open
+// 6: tree
+// 7: enemies alive obstacle closed
+// 8: enemies alive obstacle open
+// A: hero
+// a: dragon up => 1
+// b: dragon right => 2
+// c: dragon down => 3
+// d: dragon left => 4
+// e: goblin => 5
+// f: crystal => 6
 
 c = a.getContext`2d`;
 
@@ -61,54 +61,54 @@ c = a.getContext`2d`;
 P = [
 
 // 0: Heroes 1-21
-`00010003000
-09010001020
-00030001000`,
+`0001000f000
+0A010001020
+000f0001000`,
 
 // 1: Heroes 1-20
 `00010001000
-90330000033
+A0ff00000ff
 00010001000
-11111111131
+111111111f1
 00010001000
-02300333300
+02f00ffff00
 00010001000`,
 
 // 2: Heroes 1-19
 `00010001000
-94000301020
-00010005000`,
+A3000f01020
+00010004000`,
 
 // 3: Heroes 1-18
 `0000012
-0930015
-0330000
-0007000
-7404040
+0Af0014
+0ff0000
+0006000
+6303030
 0000000`,
 
 // 4: Heroes 2-25
-`10000000008
+`1000000000e
 00000000000
-90000800102
+A0000e00102
 00000000000
-10000000008`,
+1000000000e`,
 
 // 5: Heroes 2-21
 `12000000000
 00000000000
 b0000000000
 00000010000
-10000011811
-10000010300
-110a0110009`,
+10000011e11
+10000010f00
+110a011000A`,
 
 // 6: Heroes 2-11
 `00000001000
 00000001020
-09308001000
-000030011e1
-80000000001`
+0Af0e001000
+0000f001171
+e0000000001`
 ];
 
 // Current puzzle
@@ -131,9 +131,9 @@ parse = (x, y, cell, level = P[p].split`\n`) => {
       cell = line[x];
       M[y][x] = 0;
       O[y][x] = 0;
-      if(cell == 9) H = {x,y}; // Hero
-      else if("38abcd".includes(cell)) O[y][x] = cell; // Objects
-      else M[y][x] = cell; // Map
+      if(cell == "A") H = {x,y}; // Hero
+      else if("abcdef".includes(cell)) O[y][x] = " abcdef".indexOf(cell); // Objects
+      else M[y][x] = +cell; // Map
     }
   }
   U.push([structuredClone(M), structuredClone(O), structuredClone(H), L, W, D]); // save current state in history
@@ -150,21 +150,21 @@ draw = (x, y, cell) => {
   for(y in M){
     for(x in M[y]){
       cell = M[y][x];
-      c.fillStyle = {
-        0: "#eee", // air
-        1: "#000", // wall
-        2: "#abf", // exit
-        4: "#fd3", // button
-        5: "#fa2", // toggle obstacle on
-        6: "#fa2", // toggle obstacle off
-        7: "#474", // tree
-        "e": "#f8a", // enemies obstacle open
-        "f": "#f8a"  // enemies obstacle closed
-      }[cell];
+      c.fillStyle = [
+        "#eee", // 0: ground
+        "#000", // 1: wall
+        "#abf", // 2: exit
+        "#fd3", // 3: button
+        "#fa2", // 4: toggle obstacle on
+        "#fa2", // 5: toggle obstacle off
+        "#474", // 6: tree
+        "#f8a", // 7: enemies obstacle open
+        "#f8a"  // 8: enemies obstacle closed
+      ][cell];
       c.fillRect(x*9,y*9,9,9);
       
       // Cleared squares (obstacles off)
-      if(cell == 6 || cell == "f"){
+      if(cell == 5 || cell == 8){
         c.fillStyle = "#eee";
         c.fillRect(x*9+1,y*9+1,7,7);
       }
@@ -177,15 +177,15 @@ draw = (x, y, cell) => {
       if(cell = O[y][x]){
       
         // Small squares (crystal, goblin)
-        if(cell == 3 || cell == 8){
-          c.fillStyle = {3: "#888", 8: "#531"}[cell];
+        if(cell == 5 || cell == 6){
+          c.fillStyle = {5: "#531", 6: "#888"}[cell];
           c.fillRect(x*9+1, y*9+1, 7, 7);
         }
         
         // Dragons
         else{
           c.fillStyle = "#531";
-          c.fillText({a:"▲",b:"▶",c:"▼",d:"◀"}[cell],x*9,y*9+8);
+          c.fillText(" ▲▶▼◀"[cell],x*9,y*9+8);
         }
       }
     }
@@ -198,11 +198,22 @@ draw = (x, y, cell) => {
 
 // Keyboard input
 onkeydown = (
-  e, i, j, k, l, t, u, v, E = 0, // loop/temp vars
-  x = H.x, y = H.y, // hero position
-  dirs = [{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}], // 4 directions
-  dir = dirs[e.keyCode-37], // arrow key direction
-  F = [] // reset fatalities list
+  
+  // Event/loop/temp vars
+  e, i, j, k, l, t, u, E = 0,
+
+  // Hero position
+  x = H.x, y = H.y,
+
+  // 4 directions
+  dirs = [{x:-1,y:0},{x:0,y:-1},{x:1,y:0},{x:0,y:1}],
+  
+  // Arrow key direction
+  dir = dirs[e.keyCode-37],
+  
+  // Fatalities list
+  F = []
+  
 ) => {
 
   // R = reset
@@ -226,12 +237,12 @@ onkeydown = (
       i = i + dir.y, j = j + dir.x, t++
     ){
       
-      // If we encounter a wall (1), toggle obstacle (5), tree (7), enemy obstacle (e): stop
-      if("157e".includes(M[i]?.[j])){
+      // If we encounter a wall (1), toggle obstacle (4), tree (6), enemy obstacle (7): stop
+      if("1467".includes(M[i]?.[j])){
         break;
       }
 
-      // if we find an empty cell (no object), we can move/push
+      // if we find an empty cell (any other map item + no object), we can move/push
       else if(O[i]?.[j] == 0){
       
         // Backtrack all the cells up to the hero
@@ -241,7 +252,7 @@ onkeydown = (
           k -= dir.y, l -= dir.x
         ){
         
-          // Push Oects away from the hero
+          // Push objects away from the hero
           O[k][l] = O[k - dir.y][l - dir.x];
         }
         
@@ -255,57 +266,66 @@ onkeydown = (
     }
     
     // Enemies attacks
-    // loop on all the map
+    // loop on all the objects
     for(j in O){
       for(i in O[j]){
       
-        // If there's a goblin
-        if(O[j][i] == 8){
-          E++;
-          for(k of dirs){
+        if(O[j][i]){
+      
+          // If there's a goblin
+          if(O[j][i] == 5){
           
-            t = O[+j+k.y]?.[+i+k.x];
-          
-            // Kill goblins / dragons around (in all 4 directions)
-            if("8abcd".includes(t)){
-              F.push({x: +i+k.x, y: +j+k.y});
-            }
+            // Count enemy
+            E++;
             
-            // Kill hero
-            if(y == +j+k.y && x == +i+k.x){
-              D = 1;
+            for(k of dirs){
+            
+              t = O[+j+k.y]?.[+i+k.x];
+            
+              // Kill goblins / dragons around (in all 4 directions)
+              if(t < 6){
+                F.push({x: +i+k.x, y: +j+k.y});
+              }
+              
+              // Kill hero
+              if(H.y == +j+k.y && H.x == +i+k.x){
+                D = 1;
+              }
             }
           }
-        }
 
-        // If there's a dragon
-        if(u = dirs[{d:0,a:1,b:2,c:3}[O[j][i]]]){
-          E++;
-        
-          // Loop on all the cells in the dragon's direction
-          for(
-            k = +j + u.y, l = +i + u.x, t = 0;
-            t < 99;
-            k += u.y, l += u.x, t++
-          ){
+          // If there's a dragon
+          else if(O[j][i] < 5){
           
-            v = M[k]?.[l];
-            
-            // Stop on solid tiles or crystal
-            if("157e".includes(v) || O[k]?.[l] == 3){
-              break;
-            }
-            
-            // Destroy other enemies (= any non-zero object)
-            if(O[k]?.[l]){
-              F.push({x:l,y:k});
-              break;
-            }
-            
-            // Kill hero
-            if(y == k && x == l){
-              D = 1;
-              break;
+            // Get dragon direction
+            u = dirs[O[j][i]];
+          
+            // Count enemy
+            E++;
+          
+            // Loop on all the cells in the dragon's direction
+            for(
+              k = +j + u.y, l = +i + u.x, t = 0;
+              t < 99;
+              k += u.y, l += u.x, t++
+            ){
+
+              // Stop on solid tiles or crystal
+              if("1467".includes(M[k]?.[l]) || O[k]?.[l] == 6){
+                break;
+              }
+              
+              // Destroy other enemies (= any non-zero object)
+              if(O[k]?.[l] && O[k]?.[l] < 6){
+                F.push({x:l,y:k});
+                break;
+              }
+              
+              // Kill hero
+              if(H.y == k && H.x == l){
+                D = 1;
+                break;
+              }
             }
           }
         }
@@ -313,27 +333,27 @@ onkeydown = (
     }
     
     // If target cell is an exit
-    if(M[y][x] == 2){
+    if(M[H.y][H.x] == 2){
       
       // Win
       W = 1;
     }
     
-    // Check if all yellow buttons are pressed
+    // Check if all toggle buttons are pressed
     Y = 1;
     for(j in M){
       for(i in M[j]){
-        if(M[j][i] == 4 && (O[j][i] == 0 && !(H.x == i && H.y == j))){
+        if(M[j][i] == 3 && (O[j][i] == 0 && !(H.x == i && H.y == j))){
           Y = 0;
         }
       }
     }
     
-    // Toggle orange obstacles if yellow buttons status changed
+    // Toggle orange obstacles if toggle buttons status changed
     if(Y != L){
       for(j in M){
         for(i in M[j]){
-          if(M[j][i] == 5 || M[j][i] == 6) M[j][i] = 11 - M[j][i];
+          if(M[j][i] == 4 || M[j][i] == 5) M[j][i] = 9 - M[j][i];
         }
       }
     }
@@ -353,7 +373,7 @@ onkeydown = (
     if(!E){
       for(j in M){
         for(i in M[j]){
-          if(M[j][i] == "e") M[j][i] = "f";
+          if(M[j][i] == 7) M[j][i] = 8;
         }
       }
     }
