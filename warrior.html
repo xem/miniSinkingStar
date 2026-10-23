@@ -2,14 +2,15 @@
 <body style="font:12px arial, sans-serif">
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Size: 643b zipped (engine only) / 1160b (full demo).
+<br>Engine size: 1005b (544b gzipped)
+<br>Full demo size: 2168b (1073b gzipped).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
 <p><a href="//github.com/xem/miniSinkingStar" target=_blank>Full source on Github</a>
 <pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">parse=()=>{/* read level data, create objects, set globals */};
 draw=()=>{/* render the scene */};
-onkeydown=(f,r,e,o,y,i,x,n,s,k,d=+H.x,a=+H.y,l=[-1,0,1,0],p=[0,-1,0,1],C={x:l[f.keyCode-37],y:p[f.keyCode-37]},b=[])=>{if(E=0,"r"==f.key)parse();else if("z"==f.key&&u>1)u--,[M,O,H,L,W,D]=structuredClone(U[u-1]);else if(!W&&!D&&C){for(t=1;t&lt,99&&(e=a+t*C.y,r=d+t*C.x,!(M[e][r]>5));t++)if(0==O[e][r]){for(;t--;)e=a+t*C.y,r=d+t*C.x,O[e+C.y][r+C.x]=O[e][r];H.y+=C.y,H.x+=C.x;break}for(e in O)for(r in O[e])if(O[e][r])if(5==O[e][r])for(E++,o=0;o&lt,4;o++)x=+e+p[o],i=+r+l[o],O[x]?.[i]&lt,6&&b.push({x:i,y:x}),H.y==x&&H.x==i&&(D=1);else if(O[e][r]&lt,5)for(E++,s=p[O[e][r]],n=l[O[e][r]],t=1;t&lt,99&&(x=+e+t*s,i=+r+t*n,!(M[x]?.[i]>5||6==O[x]?.[i]));t++){if(O[x]?.[i]&&O[x]?.[i]&lt,6){b.push({x:i,y:x});break}if(H.y==x&&H.x==i){D=1;break}}for(e in 1==M[H.y][H.x]&&(W=1),Y=1,M)for(r in M[e])2!=M[e][r]||0!=O[e][r]||H.x==r&&H.y==e||(Y=0);if(Y!=L)for(e in M)for(r in M[e])3!=M[e][r]&&7!=M[e][r]||(M[e][r]=10-M[e][r]);for(r of(L=Y,b))O[r.y][r.x]&&(E--,O[r.y][r.x]=0);if(!E)for(e in M)for(r in M[e])8==M[e][r]&&(M[e][r]=4);U.push(structuredClone([M,O,H,L,W,D])),u++}draw()}</pre>
+onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode-37],C=a[f.keyCode-37],b=[])=>{if(E=0,"r"==f.key)parse();else if("z"==f.key&&u>1)u--,[M,O,H,L,W,D]=structuredClone(U[u-1]);else if(!W&&!D){for(t=1;t&lt,99&&(e=s+t*C,r=k+t*l,!(M[e][r]>5));t++)if(0==O[e][r]){for(;t--;)e=s+t*C,r=k+t*l,O[e+C][r+l]=O[e][r];H.y+=C,H.x+=l;break}for(e in O)for(r in O[e])if(O[e][r])if(5==O[e][r])for(E++,o=0;o&lt,4;o++)n=+e+a[o],y=+r+d[o],O[n]?.[y]&lt,6&&b.push({x:y,y:n}),H.y==n&&H.x==y&&(D=1);else if(O[e][r]&lt,5)for(E++,t=1;t&lt,99&&(n=+e+t*a[O[e][r]],y=+r+t*d[O[e][r]],!(M[n]?.[y]>5||6==O[n]?.[y]));t++){if(O[n]?.[y]&&O[n]?.[y]&lt,6){b.push({x:y,y:n});break}if(H.y==n&&H.x==y){D=1;break}}for(e in 1==M[H.y][H.x]&&(W=1),Y=1,M)for(r in M[e])2!=M[e][r]||0!=O[e][r]||H.x==r&&H.y==e||(Y=0);if(Y!=L)for(e in M)for(r in M[e])3!=M[e][r]&&7!=M[e][r]||(M[e][r]=10-M[e][r]);for(r of(L=Y,b))O[r.y][r.x]&&(E--,O[r.y][r.x]=0);if(!E)for(e in M)for(r in M[e])8==M[e][r]&&(M[e][r]=4);U[u++]=structuredClone([M,O,H,L,W,D])}draw()}</pre>
 
 </details>
 
@@ -214,7 +215,8 @@ onkeydown = (
   dirsy = [0, -1, 0, 1],
   
   // Get arrow key direction
-  dir = {x: dirsx[e.keyCode - 37], y: dirsy[e.keyCode - 37]},
+  dirx = dirsx[e.keyCode - 37],
+  diry = dirsy[e.keyCode - 37],
   
   // Fatalities list
   F = []
@@ -236,14 +238,14 @@ onkeydown = (
   }
   
   // Arrow key pressed: move hero (and push objects) if possible
-  else if(!W && !D && dir){
+  else if(!W && !D){
   
     // Loop on all the cells in the hero's target direction
     for(t = 1; t < 99; t++){
     
       // Cell coordinates
-      j = y + t * dir.y;
-      i = x + t * dir.x;
+      j = y + t * diry;
+      i = x + t * dirx;
       
       // If there's a solid map item (map > 5): stop
       if(M[j][i] > 5){
@@ -257,16 +259,16 @@ onkeydown = (
         for( ; t--; ){
         
           // Cell coordinates
-          j = y + t * dir.y;
-          i = x + t * dir.x;
+          j = y + t * diry;
+          i = x + t * dirx;
         
           // Push objects away from the hero
-          O[j + dir.y][i + dir.x] = O[j][i];
+          O[j + diry][i + dirx] = O[j][i];
         }
         
         // Move hero
-        H.y += dir.y;
-        H.x += dir.x;
+        H.y += diry;
+        H.x += dirx;
         
         // Stop loop
         break;
