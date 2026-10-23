@@ -1,0 +1,149 @@
+﻿<!doctype html>
+<body style="font:12px arial, sans-serif">
+<h3>MiniSinkingStar level editor</h3>
+
+<p><b>Puzzle size</b>
+
+<p><input type=number id=w min=1 max=40 value=5> x <input type=number id=h min=1 max=40 value=5>
+<p><b>Editor</b>
+<p><canvas id=a width=510 height=30 style="border:3px solid;cursor:pointer"></canvas>
+<p>
+<canvas id=b width=150 height=150 style="border:30px solid;cursor:pointer"></canvas>
+<p><b>Output</b>
+<p><textarea id=out rows=8 cols=60></textarea>
+
+<script>
+// 0: ground
+// 1: exit
+// 2: toggle obstacle button
+// 3: toggle obstacle open
+// 4: enemies alive obstacle open
+// 6: tree
+// 7: toggle obstacle closed
+// 8: enemies alive obstacle closed
+// 9: wall
+// a: dragon up => 1
+// b: dragon right => 2
+// c: dragon down => 3
+// d: dragon left => 4
+// e: goblin => 5
+// f: crystal => 6
+// A: hero
+
+c = a.getContext("2d");
+d = b.getContext("2d");
+
+onload = onchange = oninput = () => {
+  b.width = w.value * 30;
+  b.height = h.value * 30;
+  map = [];
+  for(var i = 0; i < w.value; i++){
+    map[i] = [];
+  }
+  out.value = "";
+  render(1);
+  ascii();
+}
+
+render = (all = 0) => {
+
+  a.width ^= 0;
+  if(all){
+    b.width ^= 0;
+  }
+  
+  var i, j;
+  
+  // Grids
+  for(i = 0; i < 99; i++){
+    c.moveTo(i*30, 0);
+    c.lineTo(i*30, 999);
+    if(all){
+      d.moveTo(i*30, 0);
+      d.lineTo(i*30, 999);
+      d.moveTo(0, i*30);
+      d.lineTo(999, i*30);
+    }
+  }
+  
+  c.stroke();
+  if(all) {
+    d.stroke();
+  }
+  
+  // Palette:
+  
+  c.fillStyle = "#fff";
+  c.fillRect(0,0,999,30);
+  
+  // map items
+  for(i = 0; i <= 9; i++){
+    c.fillStyle = [
+      "#fff", // 0: ground
+      "#abf", // 1: exit
+      "#fd3", // 2: button
+      "#fa2", // 3: toggle obstacle off
+      "#f8a", // 4: enemies obstacle off
+      "#daf", // 5: nothing yet
+      "#474", // 6: tree
+      "#fa2", // 7: toggle obstacle on
+      "#f8a", // 8: enemies obstacle on
+      "#000", // 9: wall
+    ][i];
+    c.fillRect(i*30+5, 5, 20, 20);
+    c.fillStyle = "#fff";
+    if(i == 3 || i == 4){
+      c.fillRect(i*30+8, 8, 14, 14);
+    }
+  }
+  
+  // objects
+  for(i = 10; i <= 13; i++){
+    c.fillStyle = "#531";
+    c.font = "26px arial";
+    c.fillText("▲▶▼◀"[i - 10], i * 30+2, 24);
+  }
+  for(i = 14; i <= 15; i++){
+    c.fillStyle = ["#531","#888"][i - 14];
+    c.fillRect(i * 30 + 8, 8, 14, 14);
+  }
+  c.fillStyle = "#f33";
+  i = 16;
+  c.fillRect(i * 30 + 5, 5, 20, 20);
+}
+
+item = 0;
+a.onclick = (e) => {
+  render(0);
+  var x = e.pageX - a.offsetLeft, y = 0;
+  item = Math.floor(x/30);
+  c.beginPath();
+  c.strokeStyle = "red";
+  c.lineWidth = 5;
+  c.rect(item*30,0,30,30);
+  c.stroke();
+  c.closePath();
+}
+
+ascii = () => {
+  outstr = "";
+  for(var i = 0; i < w.value; i++){
+    for(var j = 0; j < h.value; j++){
+      outstr += "0123456789abcdefA"[map[i][j]] || 0;
+    }
+    outstr += "\n";
+  }
+  out.value = outstr;
+}
+
+b.onclick = (e) => {
+  var x = e.pageX - b.offsetLeft - 30, y = e.pageY - b.offsetTop - 30;
+  x = Math.floor(x/30);
+  y = Math.floor(y/30);
+  d.drawImage(a, item * 30+5, 5, 20, 20, x*30+5, y*30+5, 20, 20);
+  map[y][x] = item;
+  ascii();
+}
+
+
+</script>
