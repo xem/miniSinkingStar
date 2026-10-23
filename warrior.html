@@ -2,7 +2,7 @@
 <body style="font:12px arial, sans-serif">
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Size: 688b zipped (engine only) / 1.2kb (full demo).
+<br>Size: 675b zipped (engine only) / 1.2kb (full demo).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
@@ -39,14 +39,14 @@ onkeydown=(e,f,r,i,o,y,n,x,s,l=0,u=H.x,d=H.y,k=[-1,0,1,0],p=[0,-1,0,1],t={x:k[e.
 <script>
 // Map:
 // 0: ground
-// 1: wall
-// 2: exit
-// 3: button
-// 4: toggle obstacle closed
-// 5: toggle obstacle open
-// 6: tree
-// 7: enemies alive obstacle closed
-// 8: enemies alive obstacle open
+// 2 => 1: exit
+// 3 => 2: toggle obstacle button
+// 5 => 3: toggle obstacle open
+// 8 => 4: enemies alive obstacle open
+// 6 => 5: tree
+// 4 => 7: toggle obstacle closed
+// 7 => 8: enemies alive obstacle closed
+// 1 => 9: wall
 // A: hero
 // a: dragon up => 1
 // b: dragon right => 2
@@ -118,10 +118,11 @@ p = 0;
 parse = (x, y, cell, level = P[p].split`\n`) => {
   M = []; // map
   O = []; // objects
-  W =  // win
-  D =  // die
-  Y =  // yellow buttons state
-  L = 0; // last yellow buttons state
+  W =     // win
+  D =     // die
+  Y =     // yellow buttons state
+  L = 0   // last yellow buttons state
+  E = 0;  // enemy counter
   for(y = 0; y < level.length; y++){
     M[y] = [];
     O[y] = [];
@@ -142,8 +143,8 @@ parse = (x, y, cell, level = P[p].split`\n`) => {
 draw = (x, y, cell) => {
 
   // Set canvas size
-  a.width = M[0].length*9;
-  a.height = M.length*9;
+  a.width = M[0].length * 9;
+  a.height = M.length * 9;
   
   // Map
   for(y in M){
@@ -155,18 +156,12 @@ draw = (x, y, cell) => {
         "#abf", // 2: exit
         "#fd3", // 3: button
         "#fa2", // 4: toggle obstacle on
-        "#fa2", // 5: toggle obstacle off
+        "#eee", // 5: toggle obstacle off
         "#474", // 6: tree
-        "#f8a", // 7: enemies obstacle open
-        "#f8a"  // 8: enemies obstacle closed
+        "#f8a", // 7: enemies obstacle on
+        "#ddd"  // 8: enemies obstacle off
       ][cell];
-      c.fillRect(x*9,y*9,9,9);
-      
-      // Cleared squares (obstacles off)
-      if(cell == 5 || cell == 8){
-        c.fillStyle = "#eee";
-        c.fillRect(x*9+1,y*9+1,7,7);
-      }
+      c.fillRect(x * 9, y * 9, 9, 9);
     }
   }
   
@@ -175,16 +170,16 @@ draw = (x, y, cell) => {
     for(x in O[y]){
       if(cell = O[y][x]){
       
-        // Small squares (crystal, goblin)
-        if(cell == 5 || cell == 6){
-          c.fillStyle = {5: "#531", 6: "#888"}[cell];
-          c.fillRect(x*9+1, y*9+1, 7, 7);
+        // Dragons
+        if(cell < 5){
+          c.fillStyle = "#531";
+          c.fillText("▲▶▼◀"[cell - 1], x * 9, y * 9 + 8);
         }
         
-        // Dragons
+        // Small squares (crystal, goblin)
         else{
-          c.fillStyle = "#531";
-          c.fillText(" ▲▶▼◀"[cell],x*9,y*9+8);
+          c.fillStyle = ["#531","#888"][cell - 5];
+          c.fillRect(x * 9 + 1, y * 9 + 1, 7, 7);
         }
       }
     }
@@ -192,24 +187,29 @@ draw = (x, y, cell) => {
   
   // Hero
   c.fillStyle = D ? "#333" : W ? "#3c3" : "#f33";
-  c.fillRect(H.x*9+1, H.y*9+1, 7, 7);
+  c.fillRect(H.x * 9 + 1, H.y * 9 + 1, 7, 7);
 }
 
 // Keyboard input
 onkeydown = (
   
-  // Event/loop/temp vars
-  e, i, j, k, l, t, u, v, w,
-  
+  // Temp vars
+  e,          // event
+  i, j, k, l, // loop vars (x, y, direction, distance)
+  nx, ny,     // neighbour cell coordinates
+  dx, dy,     // x, y direction
+  cell,       // cell value
+
   // Enemy counter
   E = 0,
 
   // Hero position
-  x = H.x, y = H.y,
+  x = H.x,
+  y = H.y,
 
   // 4 directions (X,Y offsets)
-  dirsx = [-1,0,1,0],
-  dirsy = [0,-1,0,1],
+  dirsx = [-1, 0, 1, 0],
+  dirsy = [0, -1, 0, 1],
   
   // Get arrow key direction
   dir = {x:dirsx[e.keyCode-37], y: dirsy[e.keyCode-37]},
@@ -240,7 +240,7 @@ onkeydown = (
       j = y + t * dir.y;
       i = x + t * dir.x;
       
-      // If we encounter a wall (1), toggle obstacle (4), tree (6), enemy obstacle (7): stop
+      // If there's a solid map item (1:wall, 4:toggle obstacle, 6:tree, 7:enemy obstacle): stop
       if("1467".includes(M[j]?.[i])){
         break;
       }
@@ -249,7 +249,7 @@ onkeydown = (
       else if(O[j]?.[i] == 0){
       
         // Backtrack all the cells up to the hero
-        for(;t--;){
+        for( ; t--; ){
         
           // Cell coordinates
           j = y + t * dir.y;
@@ -285,19 +285,16 @@ onkeydown = (
             for(k = 0; k < 4; k++){
 
               // Coordinates
-              t = +j + dirsy[k];
-              u = +i + dirsx[k];
-              
-              // Object
-              l = O[t]?.[u];
+              ny = +j + dirsy[k];
+              nx = +i + dirsx[k];
             
               // Kill goblins / dragons (l = 1-5)
-              if(l < 6){
-                F.push({x: u, y: t});
+              if(O[ny]?.[nx] < 6){
+                F.push({x: nx, y: ny});
               }
               
               // Kill hero
-              if(H.y == t && H.x == u){
+              if(H.y == ny && H.x == nx){
                 D = 1;
               }
             }
@@ -306,34 +303,33 @@ onkeydown = (
           // If it's a dragon
           else if(O[j][i] < 5){
           
-            // Get dragon direction
-            k = dirsy[O[j][i]];
-            l = dirsx[O[j][i]];
-          
             // Update enemy counter
             E++;
+
+            // Get dragon direction
+            dy = dirsy[O[j][i]];
+            dx = dirsx[O[j][i]];          
           
             // Loop on all the cells in the dragon's direction
             for(t = 1; t < 99; t++){
 
               // Cell coordinates
-              v = +j + t * k;
-              w = +i + t * l;
+              ny = +j + t * dy;
+              nx = +i + t * dx;
 
               // Stop on solid tiles (map=1,4,6,7) or crystal (object=6)
-              if("1467".includes(M[v]?.[w]) || O[v]?.[w] == 6){
+              if("1467".includes(M[ny]?.[nx]) || O[ny]?.[nx] == 6){
                 break;
               }
               
               // Destroy other enemies (= any non-zero object)
-              if(O[v]?.[w] && O[v]?.[w] < 6){
-                F.push({x:w, y:v});
+              if(O[ny]?.[nx] && O[ny]?.[nx] < 6){
+                F.push({x: nx, y: ny});
                 break;
               }
-              
-              
+
               // Kill hero
-              if(H.y == v && H.x == w){
+              if(H.y == ny && H.x == nx){
                 D = 1;
                 break;
               }
@@ -343,14 +339,14 @@ onkeydown = (
       }
     }
     
-    // If hero's new cell is an exit
+    // If hero's new cell is an exit: win
     if(M[H.y][H.x] == 2){
       
       // Win
       W = 1;
     }
     
-    // Check if all toggle buttons are pressed
+    // Check if all toggle buttons are pressed (by enemies or the hero)
     Y = 1;
     for(j in M){
       for(i in M[j]){
@@ -360,7 +356,7 @@ onkeydown = (
       }
     }
     
-    // Toggle orange obstacles if toggle buttons status changed
+    // Toggle orange obstacles if the "toggle buttons" status has changed
     if(Y != L){
       for(j in M){
         for(i in M[j]){
@@ -390,7 +386,7 @@ onkeydown = (
     }
     
     // Save history
-    U.push(structuredClone([M,O,H,L,W,D]));
+    U.push(structuredClone([M, O, H, L, W, D]));
   }
   
   // Render
