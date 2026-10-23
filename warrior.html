@@ -2,7 +2,7 @@
 <body style="font:12px arial, sans-serif">
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Size: 654b zipped (engine only) / 1160b (full demo).
+<br>Size: 643b zipped (engine only) / 1160b (full demo).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
@@ -203,7 +203,6 @@ onkeydown = (
   e,          // event
   i, j, k, l, // loop vars (x, y, direction, distance)
   nx, ny,     // neighbour cell coordinates
-  dx, dy,     // direction offsets
   cell,       // cell value
 
   // Hero position
@@ -310,18 +309,14 @@ onkeydown = (
           else if(O[j][i] < 5){
           
             // Update enemy counter
-            E++;
-
-            // Get dragon direction
-            dy = dirsy[O[j][i]];
-            dx = dirsx[O[j][i]];          
+            E++;        
           
             // Loop on all the cells in the dragon's direction
             for(t = 1; t < 99; t++){
 
               // Cell coordinates
-              ny = +j + t * dy;
-              nx = +i + t * dx;
+              ny = +j + t * dirsy[O[j][i]];
+              nx = +i + t * dirsx[O[j][i]];
 
               // Stop on solid tiles (map > 5) or crystal (obj = 6)
               if(M[ny]?.[nx] > 5 || O[ny]?.[nx] == 6){
@@ -392,8 +387,7 @@ onkeydown = (
     }
     
     // Save history
-    U.push(structuredClone([M, O, H, L, W, D]));
-    u++;
+    U[u++]=(structuredClone([M, O, H, L, W, D]));
   }
   
   // Render
