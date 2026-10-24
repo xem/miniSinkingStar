@@ -1,13 +1,13 @@
 ﻿<!doctype html>
-<body style="font:12px arial, sans-serif">
+<body style="font:14px arial, sans-serif">
+<a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Engine size: 1005b (544b gzipped)
-<br>Full demo size: 2168b (1070b gzipped).
+<br>Engine size: 1063b (560b gzipped)
+<br>Full demo size: 2019b (1023b gzipped).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
-<p><a href="//github.com/xem/miniSinkingStar" target=_blank>Full source on Github</a>
 <pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">parse=()=>{/* read level data, create objects, set globals */};
 draw=()=>{/* render the scene */};
 onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode-37],C=a[f.keyCode-37],b=[])=>{if(E=0,"r"==f.key)parse();else if("z"==f.key&&u>1)u--,[M,O,H,L,W,D]=structuredClone(U[u-1]);else if(!W&&!D){for(t=1;t&lt,99&&(e=s+t*C,r=k+t*l,!(M[e][r]>5));t++)if(0==O[e][r]){for(;t--;)e=s+t*C,r=k+t*l,O[e+C][r+l]=O[e][r];H.y+=C,H.x+=l;break}for(e in O)for(r in O[e])if(O[e][r])if(5==O[e][r])for(E++,o=0;o&lt,4;o++)n=+e+a[o],y=+r+d[o],O[n]?.[y]&lt,6&&b.push({x:y,y:n}),H.y==n&&H.x==y&&(D=1);else if(O[e][r]&lt,5)for(E++,t=1;t&lt,99&&(n=+e+t*a[O[e][r]],y=+r+t*d[O[e][r]],!(M[n]?.[y]>5||6==O[n]?.[y]));t++){if(O[n]?.[y]&&O[n]?.[y]&lt,6){b.push({x:y,y:n});break}if(H.y==n&&H.x==y){D=1;break}}for(e in 1==M[H.y][H.x]&&(W=1),Y=1,M)for(r in M[e])2!=M[e][r]||0!=O[e][r]||H.x==r&&H.y==e||(Y=0);if(Y!=L)for(e in M)for(r in M[e])3!=M[e][r]&&7!=M[e][r]||(M[e][r]=10-M[e][r]);for(r of(L=Y,b))O[r.y][r.x]&&(E--,O[r.y][r.x]=0);if(!E)for(e in M)for(r in M[e])8==M[e][r]&&(M[e][r]=4);U[u++]=structuredClone([M,O,H,L,W,D])}draw()}</pre>
@@ -15,14 +15,15 @@ onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode
 </details>
 
 <p>
-<p><details><summary><b>Rules</b></summary>
+<p><details><summary><b>Rules (spoilers)</b></summary>
 <p>- You are the hero (red square)
 <br>- You need to reach the exit (blue square)
-<br>- You can push the grey blocks
+<br>- You can push the crystals (grey squares) and the enemies (brown)
 <br>- Activate yellow buttons to toggle orange obstacles
 <br>- Goblins (brown squares) kill creatures around them (not in diagonal)
 <br>- Dragons (brown triangles) kill creatures placed in front of them (only one per move)
 <br>- Pink obstacles disappear when all enemies are neutralized
+<br>- All moving objects can be destroyed by a reappearing orange obstacle
 </details>
 
 <p><b>Demo</b>
@@ -34,6 +35,7 @@ onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode
 <button onclick="parse(p=4);draw()">Level 4</button>
 <button onclick="parse(p=5);draw()">Level 5</button>
 <button onclick="parse(p=6);draw()">Level 6</button>
+<button onclick="parse(p=7);draw()">Level 7</button>
 
 <p>
 <canvas id=a style="border:9px solid;transform-origin:top left;transform:scale(3)">
@@ -46,6 +48,7 @@ onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode
 // 2: toggle obstacle button
 // 3: toggle obstacle open
 // 4: enemies alive obstacle open
+// 5: gate
 // 6: tree
 // 7: toggle obstacle closed
 // 8: enemies alive obstacle closed
@@ -58,64 +61,57 @@ onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode
 // f: crystal => 6
 // A: hero
 
-c = a.getContext`2d`;
-
 // Puzzles
 P = [
 
-// 0: Heroes 1-21
-`0009000f000
-0A090009010
-000f0009000`,
+// 0: push 1 crystal (inspired by Heroes 1-21)
+`000f000
+0A09010
+0009000`,
 
-// 1: Heroes 1-20
+// 1: push multiple crystals (inspired by Heroes 1-20)
 `00090009000
-A0ff00000ff
-00090009000
-999999999f9
-00090009000
-01f00ffff00
+A0ff0fff010
 00090009000`,
 
-// 2: Heroes 1-19
-`00090009000
-A2000f09010
-00090007000`,
+// 2: button (inspired by Heroes 1-19)
+`00007000
+A2f09010
+00009000`,
 
-// 3: Heroes 1-18
-`0000091
-0Af0097
-0ff0000
-0006000
-6202020
-0000000`,
+// 3: goblins (inspired by Heroes 2-25)
+`000000e
+0000000
+A0e0901`,
 
-// 4: Heroes 2-25
-`9000000000e
-00000000000
-A0000e00901
-00000000000
-9000000000e`,
+// 4: dragons (inspired by Heroes 2-21)
+`10000
+b0000
+00000
+009e9
+009f0
+0a90A`,
 
-// 5: Heroes 2-21
-`91000000000
-00000000000
-b0000000000
-00000090000
-90000099e99
-90000090f00
-990a099000A`,
+// 5: kill all enemies (inspired by Heroes 2-11)
+`00000091
+00000090
+00e0f098
+000f0000
+e000A000`,
 
-// 6: Heroes 2-11
-`00000009000
-00000009010
-0Af0e009000
-0000f009989
-e0000000009`
+// 6: destroy enemy with orange block
+`A0c070
+0f0090
+020091`,
+
+// 7: dragons do one kill per turn
+`09009090981
+00000000009
+b0e0e0e0e00
+000f0f0f0A0
+90000000000
+00090090090` 
 ];
-
-// Current puzzle
-p = 0;
 
 // Parse level
 parse = (x, y, line, cell, level = P[p].split`\n`) => {
@@ -164,7 +160,7 @@ draw = (x, y, cell) => {
         "#fd3", // 2: button
         "#eee", // 3: toggle obstacle off
         "#eee", // 4: enemies obstacle off
-        ,       // 5: nothing yet
+        "#000", // 5: gate
         "#474", // 6: tree
         "#fa2", // 7: toggle obstacle on
         "#f8a", // 8: enemies obstacle on
@@ -249,8 +245,8 @@ onkeydown = (
       j = y + t * diry;
       i = x + t * dirx;
       
-      // If there's a solid map item (map > 5): stop
-      if(M[j][i] > 5){
+      // If there's a solid map item (map > 4): stop
+      if(M[j][i] > 4){
         break;
       }
 
@@ -322,8 +318,8 @@ onkeydown = (
               ny = +j + t * dirsy[O[j][i]];
               nx = +i + t * dirsx[O[j][i]];
 
-              // Stop on solid tiles (map > 5) or crystal (obj = 6)
-              if(M[ny]?.[nx] > 5 || O[ny]?.[nx] == 6){
+              // Stop on solid tiles (map > 4) or crystal (obj = 6)
+              if(M[ny]?.[nx] > 4 || O[ny]?.[nx] == 6){
                 break;
               }
               
@@ -365,7 +361,28 @@ onkeydown = (
     if(Y != L){
       for(j in M){
         for(i in M[j]){
-          if(M[j][i] == 3 || M[j][i] == 7) M[j][i] = 10 - M[j][i];
+          if(M[j][i] == 7) M[j][i] = 3;
+          else if(M[j][i] == 3){
+            M[j][i] = 7;
+            
+            // Destroy objects in the way when the obstacle appears
+            if(O[j][i]){
+              
+              // Remove an enemy
+              if(O[j][i] < 6){
+                E--;
+              }
+              
+              // Kill hero
+              if(H.x == i && H.y == j){
+                D = 1;
+              }
+              
+              // Clear object
+              O[j][i] = 0;
+            }
+            
+          }
         }
       }
     }
@@ -397,6 +414,12 @@ onkeydown = (
   // Render
   draw();
 }
+
+// Canvas2D
+c = a.getContext`2d`;
+
+// Current puzzle
+p = 7;
 
 parse();
 draw();

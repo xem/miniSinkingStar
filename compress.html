@@ -1,12 +1,16 @@
-<!doctype html>
+﻿<!doctype html>
 <script src='terser.5.14.1.js'></script>
-<body style="font:12px arial, sans-serif">
+<body style="font:14px arial, sans-serif">
+<a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar JS minifier + gzipper</h3>
 
 <p><b>JS code</b>
+<p><input type=checkbox id=mini checked> Minify
 <p>
 <textarea id=t rows=25 cols=80 placeholder="paste code here" style="width:95%;height:250px;font-size:8px"></textarea>
 
+<p><b>Raw size</b> <input readonly id=raw value=0> bytes
+<p><b>Min size</b> <input readonly id=min value=0> bytes
 <p><b>Gzip size</b> <input readonly id=gz value=0> bytes
 
 <script>
@@ -25,28 +29,34 @@ function compress(string, encoding) {
 let minify = async () => {
 
   // JS
-  var js = t.value;
-  js = js.replace(/;+$/,";");
+  var js = rawjs = t.value;
+  if(mini.checked){
   
-  // JS
-  terser = await Terser.minify(
-    js, 
-    {
-      toplevel: true,
-      compress: {
-        passes: 5,
-        unsafe: true,
-        pure_getters: true
+    js = js.replace(/;+$/,";");
+    
+    // JS
+    terser = await Terser.minify(
+      js, 
+      {
+        toplevel: true,
+        compress: {
+          passes: 5,
+          unsafe: true,
+          pure_getters: true,
+          //quote_style: 3
+        }
       }
-    }
-  )
+    )
 
-  js = terser.code;
-  js = js.replace(/;+$/,"");
-  t.value = js;
+    js = terser.code;
+    js = js.replace(/;+$/,"");
+    t.value = js;
+  }
   
   const compressed = await compress(js, "gzip");
   gz.value = compressed.byteLength;
+  min.value = mini.checked ? js.length : 0;
+  raw.value = rawjs.length
 }
 
 onchange = oninput = () => {

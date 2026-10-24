@@ -1,5 +1,6 @@
 ﻿<!doctype html>
-<body style="font:12px arial, sans-serif">
+<body style="font:14px arial, sans-serif">
+<a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar level editor</h3>
 
 <p><b>Puzzle size</b>
@@ -84,16 +85,24 @@ render = (all = 0) => {
       "#fd3", // 2: button
       "#fa2", // 3: toggle obstacle off
       "#f8a", // 4: enemies obstacle off
-      "#daf", // 5: nothing yet
+      "#000", // 5: gate
       "#474", // 6: tree
       "#fa2", // 7: toggle obstacle on
       "#f8a", // 8: enemies obstacle on
       "#000", // 9: wall
     ][i];
-    c.fillRect(i*30+5, 5, 20, 20);
-    c.fillStyle = "#fff";
-    if(i == 3 || i == 4){
-      c.fillRect(i*30+8, 8, 14, 14);
+    
+    if(i == 5){
+      c.fillRect(i*30+2, 15, 5, 3);
+      c.fillRect(i*30+12, 15, 5, 3);
+      c.fillRect(i*30+22, 15, 5, 3);
+    }
+    else {
+      c.fillRect(i*30+5, 5, 20, 20);
+      c.fillStyle = "#fff";
+      if(i == 3 || i == 4){
+        c.fillRect(i*30+8, 8, 14, 14);
+      }
     }
   }
   
@@ -127,8 +136,8 @@ a.onclick = (e) => {
 
 ascii = () => {
   outstr = "";
-  for(var i = 0; i < w.value; i++){
-    for(var j = 0; j < h.value; j++){
+  for(var i = 0; i < h.value; i++){
+    for(var j = 0; j < w.value; j++){
       outstr += "0123456789abcdefA"[map[i][j]] || 0;
     }
     outstr += "\n";
@@ -140,7 +149,24 @@ b.onclick = (e) => {
   var x = e.pageX - b.offsetLeft - 30, y = e.pageY - b.offsetTop - 30;
   x = Math.floor(x/30);
   y = Math.floor(y/30);
-  d.drawImage(a, item * 30+5, 5, 20, 20, x*30+5, y*30+5, 20, 20);
+  if(item == 9){
+    d.fillStyle = "#000";
+    d.fillRect(x*30+1,y*30+1,28,28);
+  }
+  else {
+    d.fillStyle = "#fff";
+    d.fillRect(x*30+1,y*30+1,28,28);
+  }
+  
+  if(item == 5){
+    d.fillStyle = "#000";
+    d.fillRect(x*30+2, y*30+15, 5, 3);
+    d.fillRect(x*30+12, y*30+15, 5, 3);
+    d.fillRect(x*30+22, y*30+15, 5, 3);
+  }
+  else {
+    d.drawImage(a, item * 30+5, 5, 20, 20, x*30+5, y*30+5, 20, 20);
+  }
   map[y][x] = item;
   ascii();
 }
