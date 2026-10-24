@@ -3,14 +3,12 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Engine size: 1063b (560b gzipped)
-<br>Full demo size: 2019b (1023b gzipped).
+<br>Engine size: 1058b (555b gzipped)
+<br>Full demo size: <a href="warrior.min.html" style="text-decoration:none">1979b</a> (1024b gzipped).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
-<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">parse=()=>{/* read level data, create objects, set globals */};
-draw=()=>{/* render the scene */};
-onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode-37],C=a[f.keyCode-37],b=[])=>{if(E=0,"r"==f.key)parse();else if("z"==f.key&&u>1)u--,[M,O,H,L,W,D]=structuredClone(U[u-1]);else if(!W&&!D){for(t=1;t&lt,99&&(e=s+t*C,r=k+t*l,!(M[e][r]>5));t++)if(0==O[e][r]){for(;t--;)e=s+t*C,r=k+t*l,O[e+C][r+l]=O[e][r];H.y+=C,H.x+=l;break}for(e in O)for(r in O[e])if(O[e][r])if(5==O[e][r])for(E++,o=0;o&lt,4;o++)n=+e+a[o],y=+r+d[o],O[n]?.[y]&lt,6&&b.push({x:y,y:n}),H.y==n&&H.x==y&&(D=1);else if(O[e][r]&lt,5)for(E++,t=1;t&lt,99&&(n=+e+t*a[O[e][r]],y=+r+t*d[O[e][r]],!(M[n]?.[y]>5||6==O[n]?.[y]));t++){if(O[n]?.[y]&&O[n]?.[y]&lt,6){b.push({x:y,y:n});break}if(H.y==n&&H.x==y){D=1;break}}for(e in 1==M[H.y][H.x]&&(W=1),Y=1,M)for(r in M[e])2!=M[e][r]||0!=O[e][r]||H.x==r&&H.y==e||(Y=0);if(Y!=L)for(e in M)for(r in M[e])3!=M[e][r]&&7!=M[e][r]||(M[e][r]=10-M[e][r]);for(r of(L=Y,b))O[r.y][r.x]&&(E--,O[r.y][r.x]=0);if(!E)for(e in M)for(r in M[e])8==M[e][r]&&(M[e][r]=4);U[u++]=structuredClone([M,O,H,L,W,D])}draw()}</pre>
+<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">&lt;canvas id=a style=border:solid+9px>&lt;script>P=["000f000,0A09010,0009000","00090009000,A0ff0fff010,00090009000","00007000,A2f09010,00009000","000000e,0000000,A0e0901","10000,b0000,00000,009e9,009f0,0a90A","00000091,00000090,00e0f098,000f0000,e000A000"],_=(n=P[p].split(","))=>{for(f in M=[],O=[],B=[],W=D=Y=L=E=0,n)for(e in M[f]=[],O[f]=[],n[f])M[f][e]=O[f][e]=0,"A"==n[f][e]?(x=+e,y=+f):n[f][e]&lt;=9?M[f][e]=+n[f][e]:O[f][e]=" abcdef".indexOf(n[f][e]);U=[structuredClone([M,O,x,y,L,W,D])],u=1},w=()=>{for(f in a.width=9*M[0].length,a.height=9*M.length,M)for(e in M[y])c.fillStyle=["#eee","#abf","#fd3","#eee","#eee","#eee","#474","#fa2","#f8a","#000"][M[f][e]],c.fillRect(9*e,9*f,9,9);for(f in O)for(e in O[f])O[f][e]&&(c.fillStyle=6==O[f][e]?"#888":"#531",O[f][e]&lt;5?c.fillText("▲▶▼◀"[O[f][e]-1],9*e,9*f+8):c.fillRect(9*e+1,9*f+1,7,7));c.fillStyle=D?"#333":W?"#3c3":"#f33",c.fillRect(9*x+1,9*y+1,7,7)},onkeydown=(e,r=[-1,0,1,0],a=[0,-1,0,1],c=r[e.keyCode-37],d=a[e.keyCode-37],s=[],E=0)=>{if("r"==e.key)_();else if("z"==e.key&&u>1)[M,O,x,y,L,W,D]=structuredClone(U[--u-1]);else if(!W&&!D){for(t=1;t&lt;99&&(n=y+t*d,f=x+t*c,!(M[n][f]>4));t++)if(0==O[n][f]){for(;t--;)n=y+t*d,f=x+t*c,O[n+d][f+c]=O[n][f];y+=d,x+=c;break}for(n in O)for(f in O[n])if(O[n][f])if(5==O[n][f])for(E++,i=0;i&lt;4;i++)l=+n+a[i],o=+f+r[i],O[l]?.[o]&lt;6&&s.push({x:o,y:l}),y==l&&x==o&&(D=1);else if(O[n][f]&lt;5)for(E++,t=1;t&lt;99&&(l=+n+t*a[O[n][f]],o=+f+t*r[O[n][f]],!(M[l]?.[o]>4||6==O[l]?.[o]));t++){if(O[l]?.[o]&&O[l]?.[o]&lt;6){s.push({x:o,y:l});break}if(y==l&&x==o){D=1;break}}for(n in 1==M[y][x]&&(W=1),Y=1,M)for(f in M[n])2!=M[n][f]||0!=O[n][f]||x==f&&y==n||(Y=0);if(Y!=L)for(n in M)for(f in M[n])7==M[n][f]?M[n][f]=3:3==M[n][f]&&(M[n][f]=7,O[n][f]&&(O[n][f]&lt;6&&E--,x==f&&y==n&&(D=1),O[n][f]=0));for(f of(L=Y,s))O[f.y][f.x]&&(E--,O[f.y][f.x]=0);if(!E)for(n in M)for(f in M[n])8==M[n][f]&&(M[n][f]=4);U[u++]=structuredClone([M,O,x,y,L,W,D])}w(),W&&setTimeout("p++,w(_())",500)},c=a.getContext("2d"),p=0,w(_())&lt;/script></pre>
 
 </details>
 
@@ -34,12 +32,50 @@ onkeydown=(f,r,e,o,i,y,n,x,k=+H.x,s=+H.y,d=[-1,0,1,0],a=[0,-1,0,1],l=d[f.keyCode
 <button onclick="parse(p=3);draw()">Level 3</button>
 <button onclick="parse(p=4);draw()">Level 4</button>
 <button onclick="parse(p=5);draw()">Level 5</button>
-<button onclick="parse(p=6);draw()">Level 6</button>
-<button onclick="parse(p=7);draw()">Level 7</button>
-
+<p><button onclick="parse(p=6);draw()">Bonus level 1</button>
+<button onclick="parse(p=7);draw()">Bonus level 2</button>
+<button onclick="custom()">Load custom level</button>
+<style>#a{transform-origin:top left;transform:scale(3)}</style>
+<br>
+<br>
 <p>
-<canvas id=a style="border:9px solid;transform-origin:top left;transform:scale(3)">
+<canvas id=a style=border:solid+9px>
 <script>
+
+// Helpers
+// =======
+
+// Draw dragon bullets (aesthetic only, not counted in the score)
+bullets = () => {
+  var j, i, t, nx, ny, dirsx = [-1, 0, 1, 0], dirsy = [0, -1, 0, 1];
+  for(j in O){
+    for(i in O[j]){
+      if(O[j][i] && O[j][i] < 5){
+        for(t = 1; t < 99; t++){
+          ny = +j + t * dirsy[O[j][i]];
+          nx = +i + t * dirsx[O[j][i]];
+          if(M[ny][nx] || O[ny][nx] || (x == nx && y == ny)){
+            break;
+          }
+          else {
+            c.fillStyle = "#531";
+            c.fillRect(nx * 9 + 3, ny * 9 + 3, 3, 3);
+          }
+        }
+      } 
+    }
+  }
+}
+
+// Custom level
+custom = () => {
+  level = prompt("ASCII level", '');
+  P[99] = level;
+  parse(p=99);
+  draw();
+}
+
+/* ===== GOLF STARTS HERE ===== */
 
 // Map:
 
@@ -97,28 +133,17 @@ b0000
 00000090
 00e0f098
 000f0000
-e000A000`,
+e000A000`
 
-// 6: destroy enemy with orange block
-`A0c070
-0f0090
-020091`,
-
-// 7: dragons do one kill per turn
-`09009090981
-00000000009
-b0e0e0e0e00
-000f0f0f0A0
-90000000000
-00090090090` 
 ];
 
 // Parse level
-parse = (x, y, line, cell, level = P[p].split`\n`) => {
+parse = (i, j, level = P[p].split("\n")) => {
 
   // Globals
   M = []; // map
   O = []; // objects
+  B = []; // bullets
   W =     // win
   D =     // die
   Y =     // yellow buttons state
@@ -126,65 +151,64 @@ parse = (x, y, line, cell, level = P[p].split`\n`) => {
   E = 0;  // enemy counter
   
   // Parse ASCII
-  for(y in level){
-    M[y] = [];
-    O[y] = [];
-    line = level[y];
-    for(x in line){
-      cell = line[x];
-      M[y][x] = 0;
-      O[y][x] = 0;
-      if(cell == "A") H = {x: +x, y: +y}; // Hero
-      else if(cell <= 9) M[y][x] = +cell; // Map
-      else O[y][x] = " abcdef".indexOf(cell); // Objects
+  for(j in level){
+    M[j] = [];
+    O[j] = [];
+    for(i in level[j]){
+      M[j][i] = O[j][i] = 0;
+      if(level[j][i] == "A"){  // Hero
+        x = +i;
+        y = +j;
+      }
+      else if(level[j][i] <= 9) M[j][i] = +level[j][i]; // Map
+      else O[j][i] = " abcdef".indexOf(level[j][i]); // Objects
     }
   }
-  U = [structuredClone([M, O, H, L, W, D])]; // init undo history
+  U = [structuredClone([M, O, x, y, L, W, D])]; // init undo history
   u = 1; // init undo counter
 }
 
 // Draw scene
-draw = (x, y, cell) => {
+draw = (i, j) => {
 
   // Set canvas size
   a.width = M[0].length * 9;
   a.height = M.length * 9;
   
   // Map
-  for(y in M){
-    for(x in M[y]){
-      cell = M[y][x];
+  for(j in M){
+    for(i in M[y]){
       c.fillStyle = [
         "#eee", // 0: ground
         "#abf", // 1: exit
         "#fd3", // 2: button
         "#eee", // 3: toggle obstacle off
         "#eee", // 4: enemies obstacle off
-        "#000", // 5: gate
+        "#eee", // 5: gate
         "#474", // 6: tree
         "#fa2", // 7: toggle obstacle on
         "#f8a", // 8: enemies obstacle on
         "#000", // 9: wall
-      ][cell];
-      c.fillRect(x * 9, y * 9, 9, 9);
+      ][M[j][i]];
+      c.fillRect(i * 9, j * 9, 9, 9);
     }
   }
   
   // Objects
-  for(y in O){
-    for(x in O[y]){
-      if(cell = O[y][x]){
+  for(j in O){
+    for(i in O[j]){
+      if(O[j][i]){
+
+        c.fillStyle = O[j][i] == 6 ? "#888" : "#531";
       
         // Dragons
-        if(cell < 5){
-          c.fillStyle = "#531";
-          c.fillText("▲▶▼◀"[cell - 1], x * 9, y * 9 + 8);
+        if(O[j][i] < 5){
+          c.fillText("▲▶▼◀"[O[j][i]-1], i * 9, j * 9 + 8);
         }
         
         // Small squares (crystal, goblin)
         else{
-          c.fillStyle = ["#531","#888"][cell - 5];
-          c.fillRect(x * 9 + 1, y * 9 + 1, 7, 7);
+          c.fillRect(i * 9 + 1, j * 9 + 1, 7, 7);
         }
       }
     }
@@ -192,7 +216,10 @@ draw = (x, y, cell) => {
   
   // Hero
   c.fillStyle = D ? "#333" : W ? "#3c3" : "#f33";
-  c.fillRect(H.x * 9 + 1, H.y * 9 + 1, 7, 7);
+  c.fillRect(x * 9 + 1, y * 9 + 1, 7, 7);
+  
+  // Bullets (bonus)
+  bullets();
 }
 
 // Keyboard input
@@ -204,10 +231,6 @@ onkeydown = (
   nx, ny,     // neighbour cell coordinates
   cell,       // cell value
 
-  // Hero position
-  x = +H.x,
-  y = +H.y,
-
   // 4 directions (X,Y offsets)
   dirsx = [-1, 0, 1, 0],
   dirsy = [0, -1, 0, 1],
@@ -217,12 +240,12 @@ onkeydown = (
   diry = dirsy[e.keyCode - 37],
   
   // Fatalities list
-  F = []
+  F = [],
+  
+  // Reset enemy counter
+  E = 0
   
 ) => {
-
-  // Reset enemy counter
-  E = 0;
   
   // R = reset
   if(e.key == "r"){
@@ -231,8 +254,7 @@ onkeydown = (
   
   // Z = undo
   else if(e.key == "z" && u > 1){
-    u--;
-    [M, O, H, L, W, D] = structuredClone(U[u-1]);
+    [M, O, x, y, L, W, D] = structuredClone(U[--u-1]);
   }
   
   // Arrow key pressed: move hero (and push objects) if possible
@@ -265,8 +287,8 @@ onkeydown = (
         }
         
         // Move hero
-        H.y += diry;
-        H.x += dirx;
+        y += diry;
+        x += dirx;
         
         // Stop loop
         break;
@@ -299,7 +321,7 @@ onkeydown = (
               }
               
               // Kill hero
-              if(H.y == ny && H.x == nx){
+              if(y == ny && x == nx){
                 D = 1;
               }
             }
@@ -330,7 +352,7 @@ onkeydown = (
               }
 
               // Kill hero
-              if(H.y == ny && H.x == nx){
+              if(y == ny && x == nx){
                 D = 1;
                 break;
               }
@@ -341,7 +363,7 @@ onkeydown = (
     }
     
     // If hero's new cell is an exit: win
-    if(M[H.y][H.x] == 1){
+    if(M[y][x] == 1){
       
       // Win
       W = 1;
@@ -351,7 +373,7 @@ onkeydown = (
     Y = 1;
     for(j in M){
       for(i in M[j]){
-        if(M[j][i] == 2 && (O[j][i] == 0 && !(H.x == i && H.y == j))){
+        if(M[j][i] == 2 && (O[j][i] == 0 && !(x == i && y == j))){
           Y = 0;
         }
       }
@@ -374,7 +396,7 @@ onkeydown = (
               }
               
               // Kill hero
-              if(H.x == i && H.y == j){
+              if(x == i && y == j){
                 D = 1;
               }
               
@@ -408,19 +430,36 @@ onkeydown = (
     }
     
     // Save history
-    U[u++]=(structuredClone([M, O, H, L, W, D]));
+    U[u++]=(structuredClone([M, O, x, y, L, W, D]));
   }
   
   // Render
   draw();
+  
+  // Auto play next level after a win
+  if(W){
+    setTimeout(()=>{
+      parse(p++);
+      draw();
+    }, 500);
+  }
 }
 
 // Canvas2D
-c = a.getContext`2d`;
+c = a.getContext("2d");
 
 // Current puzzle
-p = 7;
+p = 0;
 
+// Start
 parse();
 draw();
+
+/* ===== GOLF ENDS HERE ===== */
+
+// Bonus levels
+P[6] = `A0c77\n0f097\n02097\n00991`;
+P[7] = `09009090981\n00000000009\nb0e0e0e0e00\n000f0f0f0A0\n90000000000\n00090090090`;
+
+
 </script>
