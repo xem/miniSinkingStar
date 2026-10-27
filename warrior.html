@@ -3,12 +3,12 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar</h3>
 <p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Engine size: 1058b (555b gzipped)
-<br>Full demo size: <a href="warrior.min.html" style="text-decoration:none">1979b</a> (1024b gzipped).
+<br>Engine size: 1070b (559b gzipped)
+<br>Full demo size: 1979b (1022b gzipped) (<a href="warrior.min.html" style="text-decoration:none">play</a>).
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p><details><summary><b>Source code</b></summary>
-<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">&lt;canvas id=a style=border:solid+9px>&lt;script>P=["000f000,0A09010,0009000","00090009000,A0ff0fff010,00090009000","00007000,A2f09010,00009000","000000e,0000000,A0e0901","10000,b0000,00000,009e9,009f0,0a90A","00000091,00000090,00e0f098,000f0000,e000A000"],_=(n=P[p].split(","))=>{for(f in M=[],O=[],B=[],W=D=Y=L=E=0,n)for(e in M[f]=[],O[f]=[],n[f])M[f][e]=O[f][e]=0,"A"==n[f][e]?(x=+e,y=+f):n[f][e]&lt;=9?M[f][e]=+n[f][e]:O[f][e]=" abcdef".indexOf(n[f][e]);U=[structuredClone([M,O,x,y,L,W,D])],u=1},w=()=>{for(f in a.width=9*M[0].length,a.height=9*M.length,M)for(e in M[y])c.fillStyle=["#eee","#abf","#fd3","#eee","#eee","#eee","#474","#fa2","#f8a","#000"][M[f][e]],c.fillRect(9*e,9*f,9,9);for(f in O)for(e in O[f])O[f][e]&&(c.fillStyle=6==O[f][e]?"#888":"#531",O[f][e]&lt;5?c.fillText("▲▶▼◀"[O[f][e]-1],9*e,9*f+8):c.fillRect(9*e+1,9*f+1,7,7));c.fillStyle=D?"#333":W?"#3c3":"#f33",c.fillRect(9*x+1,9*y+1,7,7)},onkeydown=(e,r=[-1,0,1,0],a=[0,-1,0,1],c=r[e.keyCode-37],d=a[e.keyCode-37],s=[],E=0)=>{if("r"==e.key)_();else if("z"==e.key&&u>1)[M,O,x,y,L,W,D]=structuredClone(U[--u-1]);else if(!W&&!D){for(t=1;t&lt;99&&(n=y+t*d,f=x+t*c,!(M[n][f]>4));t++)if(0==O[n][f]){for(;t--;)n=y+t*d,f=x+t*c,O[n+d][f+c]=O[n][f];y+=d,x+=c;break}for(n in O)for(f in O[n])if(O[n][f])if(5==O[n][f])for(E++,i=0;i&lt;4;i++)l=+n+a[i],o=+f+r[i],O[l]?.[o]&lt;6&&s.push({x:o,y:l}),y==l&&x==o&&(D=1);else if(O[n][f]&lt;5)for(E++,t=1;t&lt;99&&(l=+n+t*a[O[n][f]],o=+f+t*r[O[n][f]],!(M[l]?.[o]>4||6==O[l]?.[o]));t++){if(O[l]?.[o]&&O[l]?.[o]&lt;6){s.push({x:o,y:l});break}if(y==l&&x==o){D=1;break}}for(n in 1==M[y][x]&&(W=1),Y=1,M)for(f in M[n])2!=M[n][f]||0!=O[n][f]||x==f&&y==n||(Y=0);if(Y!=L)for(n in M)for(f in M[n])7==M[n][f]?M[n][f]=3:3==M[n][f]&&(M[n][f]=7,O[n][f]&&(O[n][f]&lt;6&&E--,x==f&&y==n&&(D=1),O[n][f]=0));for(f of(L=Y,s))O[f.y][f.x]&&(E--,O[f.y][f.x]=0);if(!E)for(n in M)for(f in M[n])8==M[n][f]&&(M[n][f]=4);U[u++]=structuredClone([M,O,x,y,L,W,D])}w(),W&&setTimeout("p++,w(_())",500)},c=a.getContext("2d"),p=0,w(_())&lt;/script></pre>
+<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">&lt;canvas id=a style=border:solid+9px>&lt;script>P=["0f00,A901","009000900,Aff0ff001,009000900","00070,2f090,A0091","0000e,A0000,0e901","1000,c000,90e0,90f0,9b0A","190000,890000,00e0f0,e00f0A","18A00,99990,000a0,00000,0c000,00000"],l=(f,e=P[p].split(","))=>{if(f){for(j in M=[],O=[],B=[],W=D=Y=L=E=0,e)for(i in M[j]=[],O[j]=[],e[j])M[j][i]=O[j][i]=0,"A"==e[j][i]?(x=+i,y=+j):e[j][i]&lt;=9?M[j][i]=+e[j][i]:O[j][i]=" abcdef".indexOf(e[j][i]);U=[structuredClone([M,O,x,y,L,W,D])],u=1}for(j in a.width=9*M[0].length,a.height=9*M.length,M)for(i in M[y])c.fillStyle=["#eee","#abf","#fd3","#eee","#eee","#eee","#474","#fa2","#f8a","#000"][M[j][i]],c.fillRect(9*i,9*j,9,9);for(j in O)for(i in O[j])O[j][i]&&(c.fillStyle=6==O[j][i]?"#888":"#531",O[j][i]&lt;5?c.fillText("◀▲▶▼"[O[j][i]-1],9*i,9*j+8):c.fillRect(9*i+1,9*j+1,7,7));c.fillStyle=D?"#333":W?"#3c3":"#f33",c.fillRect(9*x+1,9*y+1,7,7)},onkeydown=(f,e=[-1,0,1,0],n=[0,-1,0,1],o=e[f.keyCode-37],r=n[f.keyCode-37],c=[],d=0)=>{if("r"==f.key)l(1);else if("z"==f.key&&u>1)[M,O,x,y,L,W,D]=structuredClone(U[--u-1]);else if(!W&&!D){for(t=1;t&lt;99&&(j=y+t*r,i=x+t*o,!(M[j][i]>4));t++)if(0==O[j][i]){for(;t--;)j=y+t*r,i=x+t*o,O[j+r][i+o]=O[j][i];y+=r,x+=o;break}for(j in O)for(i in O[j])if(O[j][i])if(5==O[j][i])for(d++,k=0;k&lt;4;k++)ny=+j+n[k],nx=+i+e[k],O[ny]?.[nx]&lt;6&&c.push({x:nx,y:ny}),y==ny&&x==nx&&(D=1);else if(O[j][i]&lt;5)for(d++,t=1;t&lt;99&&(ny=+j+t*n[O[j][i]-1],nx=+i+t*e[O[j][i]-1],!(M[ny]?.[nx]>4||6==O[ny]?.[nx]));t++){if(O[ny]?.[nx]&&O[ny]?.[nx]&lt;6){c.push({x:nx,y:ny});break}if(y==ny&&x==nx){D=1;break}}for(j in M[y][x]==1&&!D&&(W=1),Y=1,M)for(i in M[j])2!=M[j][i]||0!=O[j][i]||x==i&&y==j||(Y=0);if(Y!=L)for(j in M)for(i in M[j])7==M[j][i]?M[j][i]=3:3==M[j][i]&&(M[j][i]=7,O[j][i]&&(O[j][i]&lt;6&&d--,x==i&&y==j&&(D=1),O[j][i]=0));for(i of(L=Y,c))O[i.y][i.x]&&(d--,O[i.y][i.x]=0);if(!d)for(j in M)for(i in M[j])8==M[j][i]&&(M[j][i]=4);U[u++]=structuredClone([M,O,x,y,L,W,D]),W&&setTimeout("l(++p)",500)}l()},c=a.getContext("2d"),p=0,l(1)&lt;/script></pre>
 
 </details>
 
@@ -26,14 +26,17 @@
 
 <p><b>Demo</b>
 <p>
-<button onclick="parse(p=0);draw()">Level 0</button> 
-<button onclick="parse(p=1);draw()">Level 1</button>
-<button onclick="parse(p=2);draw()">Level 2</button>
-<button onclick="parse(p=3);draw()">Level 3</button>
-<button onclick="parse(p=4);draw()">Level 4</button>
-<button onclick="parse(p=5);draw()">Level 5</button>
-<p><button onclick="parse(p=6);draw()">Bonus level 1</button>
-<button onclick="parse(p=7);draw()">Bonus level 2</button>
+<button onclick="p=0,l(1)">Level 0</button> 
+<button onclick="l(p=1)">Level 1</button>
+<button onclick="l(p=2)">Level 2</button>
+<button onclick="l(p=3)">Level 3</button>
+<button onclick="l(p=4)">Level 4</button>
+<button onclick="l(p=5)">Level 5</button>
+<button onclick="l(p=6)">Level 6</button>
+
+<p>
+<button onclick="l(p=7)">Bonus level 1</button>
+<button onclick="l(p=8)">Bonus level 2</button>
 <button onclick="custom()">Load custom level</button>
 <style>#a{transform-origin:top left;transform:scale(3)}</style>
 <br>
@@ -48,15 +51,25 @@
 // Draw dragon bullets (aesthetic only, not counted in the score)
 bullets = () => {
   var j, i, t, nx, ny, dirsx = [-1, 0, 1, 0], dirsy = [0, -1, 0, 1];
+  
+  // Loop on all objects
   for(j in O){
     for(i in O[j]){
+    
+      // If there's a dragon:
       if(O[j][i] && O[j][i] < 5){
+      
+        // See neighbour cells in its direction
         for(t = 1; t < 99; t++){
-          ny = +j + t * dirsy[O[j][i]];
-          nx = +i + t * dirsx[O[j][i]];
-          if(M[ny][nx] || O[ny][nx] || (x == nx && y == ny)){
+          ny = +j + t * dirsy[O[j][i]-1];
+          nx = +i + t * dirsx[O[j][i]-1];
+          
+          // If we encounter a solid map item or a solid object or the hero, stop
+          if(M[ny]?.[nx] > 5 || O[ny]?.[nx] || (x == nx && y == ny)){
             break;
           }
+          
+          // Draw bullets
           else {
             c.fillStyle = "#531";
             c.fillRect(nx * 9 + 3, ny * 9 + 3, 3, 3);
@@ -71,7 +84,7 @@ bullets = () => {
 custom = () => {
   level = prompt("ASCII level", '');
   P[99] = level;
-  parse(p=99);
+  l(1,p=99);
   draw();
 }
 
@@ -89,10 +102,10 @@ custom = () => {
 // 7: toggle obstacle closed
 // 8: enemies alive obstacle closed
 // 9: wall
-// a: dragon up => 1
-// b: dragon right => 2
-// c: dragon down => 3
-// d: dragon left => 4
+// a: dragon left => 1
+// b: dragon up => 2
+// c: dragon right => 3
+// d: dragon down => 4
 // e: goblin => 5
 // f: crystal => 6
 // A: hero
@@ -101,77 +114,72 @@ custom = () => {
 P = [
 
 // 0: push 1 crystal (inspired by Heroes 1-21)
-`000f000
-0A09010
-0009000`,
+`0f00,A901`,
 
 // 1: push multiple crystals (inspired by Heroes 1-20)
-`00090009000
-A0ff0fff010
-00090009000`,
+`009000900,Aff0ff001,009000900`,
 
 // 2: button (inspired by Heroes 1-19)
-`00007000
-A2f09010
-00009000`,
+`00070,2f090,A0091`,
 
 // 3: goblins (inspired by Heroes 2-25)
-`000000e
-0000000
-A0e0901`,
+`0000e,A0000,0e901`,
 
 // 4: dragons (inspired by Heroes 2-21)
-`10000
-b0000
-00000
-009e9
-009f0
-0a90A`,
+`1000,c000,90e0,90f0,9b0A`,
 
-// 5: kill all enemies (inspired by Heroes 2-11)
-`00000091
-00000090
-00e0f098
-000f0000
-e000A000`
+// 5: kill all goblins (inspired by Heroes 2-11)
+`190000,890000,00e0f0,e00f0A`,
+
+// 6: kill all dragons
+`18A00,99990,000a0,00000,0c000,00000`,
+
+// 7: kill dragon in orange trap
+`A0d7,0f07,0297,0091`
+
 
 ];
 
-// Parse level
-parse = (i, j, level = P[p].split("\n")) => {
-
-  // Globals
-  M = []; // map
-  O = []; // objects
-  B = []; // bullets
-  W =     // win
-  D =     // die
-  Y =     // yellow buttons state
-  L =     // last yellow buttons state
-  E = 0;  // enemy counter
+// Level parsing/rendering
+l = (
+  // i, j, // loop vars
   
+  parse, // 1: parse and draw / 0: draw only
+  
+  level = P[p].split(",")
+) => {
+
   // Parse ASCII
-  for(j in level){
-    M[j] = [];
-    O[j] = [];
-    for(i in level[j]){
-      M[j][i] = O[j][i] = 0;
-      if(level[j][i] == "A"){  // Hero
-        x = +i;
-        y = +j;
+  if(parse){
+
+    // Globals
+    M = []; // map
+    O = []; // objects
+    B = []; // bullets
+    W =     // win
+    D =     // die
+    Y =     // yellow buttons state
+    L =     // last yellow buttons state
+    E = 0;  // enemy counter
+  
+    for(j in level){
+      M[j] = [];
+      O[j] = [];
+      for(i in level[j]){
+        M[j][i] = O[j][i] = 0;
+        if(level[j][i] == "A"){  // Hero
+          x = +i;
+          y = +j;
+        }
+        else if(level[j][i] <= 9) M[j][i] = +level[j][i]; // Map
+        else O[j][i] = " abcdef".indexOf(level[j][i]); // Objects
       }
-      else if(level[j][i] <= 9) M[j][i] = +level[j][i]; // Map
-      else O[j][i] = " abcdef".indexOf(level[j][i]); // Objects
     }
+    U = [structuredClone([M, O, x, y, L, W, D])]; // init undo history
+    u = 1; // init undo counter
   }
-  U = [structuredClone([M, O, x, y, L, W, D])]; // init undo history
-  u = 1; // init undo counter
-}
-
-// Draw scene
-draw = (i, j) => {
-
-  // Set canvas size
+  
+  // Draw scene
   a.width = M[0].length * 9;
   a.height = M.length * 9;
   
@@ -203,7 +211,7 @@ draw = (i, j) => {
       
         // Dragons
         if(O[j][i] < 5){
-          c.fillText("▲▶▼◀"[O[j][i]-1], i * 9, j * 9 + 8);
+          c.fillText("◀▲▶▼"[O[j][i]-1], i * 9, j * 9 + 8);
         }
         
         // Small squares (crystal, goblin)
@@ -227,9 +235,9 @@ onkeydown = (
   
   // Temp vars
   e,          // event
-  i, j, k, l, // loop vars (x, y, direction, distance)
-  nx, ny,     // neighbour cell coordinates
-  cell,       // cell value
+  // i, j, k, l, // loop vars (x, y, direction, distance)
+  // nx, ny,     // neighbour cell coordinates
+  // cell,       // cell value
 
   // 4 directions (X,Y offsets)
   dirsx = [-1, 0, 1, 0],
@@ -249,7 +257,7 @@ onkeydown = (
   
   // R = reset
   if(e.key == "r"){
-    parse();
+    l(1);
   }
   
   // Z = undo
@@ -337,8 +345,8 @@ onkeydown = (
             for(t = 1; t < 99; t++){
 
               // Cell coordinates
-              ny = +j + t * dirsy[O[j][i]];
-              nx = +i + t * dirsx[O[j][i]];
+              ny = +j + t * dirsy[O[j][i]-1];
+              nx = +i + t * dirsx[O[j][i]-1];
 
               // Stop on solid tiles (map > 4) or crystal (obj = 6)
               if(M[ny]?.[nx] > 4 || O[ny]?.[nx] == 6){
@@ -362,8 +370,8 @@ onkeydown = (
       }
     }
     
-    // If hero's new cell is an exit: win
-    if(M[y][x] == 1){
+    // If hero's alive and his new cell is an exit: win
+    if(M[y][x] == 1 && !D){
       
       // Win
       W = 1;
@@ -431,18 +439,17 @@ onkeydown = (
     
     // Save history
     U[u++]=(structuredClone([M, O, x, y, L, W, D]));
+    
+    // Auto play next level after a win
+    if(W){
+      setTimeout(()=>{
+        l(++p);
+      }, 500);
+    }
   }
   
   // Render
-  draw();
-  
-  // Auto play next level after a win
-  if(W){
-    setTimeout(()=>{
-      parse(p++);
-      draw();
-    }, 500);
-  }
+  l();
 }
 
 // Canvas2D
@@ -452,14 +459,14 @@ c = a.getContext("2d");
 p = 0;
 
 // Start
-parse();
-draw();
+l(1);
 
 /* ===== GOLF ENDS HERE ===== */
 
 // Bonus levels
-P[6] = `A0c77\n0f097\n02097\n00991`;
-P[7] = `09009090981\n00000000009\nb0e0e0e0e00\n000f0f0f0A0\n90000000000\n00090090090`;
+
+// 8: one kill per turn
+P[8] = `09009090981,00000000009,c0e0e0e0e00,000f0f0f0A0,90000000000,00090090090`;
 
 
 </script>

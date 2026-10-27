@@ -140,9 +140,9 @@ ascii = () => {
     for(var j = 0; j < w.value; j++){
       outstr += "0123456789abcdefA"[map[i][j]] || 0;
     }
-    outstr += "\n";
+    outstr += ",";
   }
-  out.value = outstr;
+  out.value = outstr.slice(0,outstr.length-1);
 }
 
 b.onclick = (e) => {
