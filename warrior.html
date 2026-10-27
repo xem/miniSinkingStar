@@ -2,29 +2,21 @@
 <body style="font:14px arial, sans-serif">
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
-<p>Tiny "Sinking Star Heroes Wizard" implementation in HTML+JS.
-<br>Engine size: 1070b (559b gzipped)
-<br>Full demo size: 1979b (1022b gzipped) (<a href="warrior.min.html" style="text-decoration:none">play</a>).
+<p>Tiny "Sinking Star Wizard" implementation in HTML+JS.
+<br>Engine size: 878b (508b gzipped) / Full demo size: 1691b (1021b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset.
-
-<p><details><summary><b>Source code</b></summary>
-<pre style="background:#dfefff;font-size:8px;padding:5px;word-wrap:break-word;white-space:pre-wrap;">&lt;canvas id=a style=border:solid+9px>&lt;script>P=["0f00,A901","009000900,Aff0ff001,009000900","00070,2f090,A0091","0000e,A0000,0e901","1000,c000,90e0,90f0,9b0A","190000,890000,00e0f0,e00f0A","18A00,99990,000a0,00000,0c000,00000"],l=(f,e=P[p].split(","))=>{if(f){for(j in M=[],O=[],B=[],W=D=Y=L=E=0,e)for(i in M[j]=[],O[j]=[],e[j])M[j][i]=O[j][i]=0,"A"==e[j][i]?(x=+i,y=+j):e[j][i]&lt;=9?M[j][i]=+e[j][i]:O[j][i]=" abcdef".indexOf(e[j][i]);U=[structuredClone([M,O,x,y,L,W,D])],u=1}for(j in a.width=9*M[0].length,a.height=9*M.length,M)for(i in M[y])c.fillStyle=["#eee","#abf","#fd3","#eee","#eee","#eee","#474","#fa2","#f8a","#000"][M[j][i]],c.fillRect(9*i,9*j,9,9);for(j in O)for(i in O[j])O[j][i]&&(c.fillStyle=6==O[j][i]?"#888":"#531",O[j][i]&lt;5?c.fillText("◀▲▶▼"[O[j][i]-1],9*i,9*j+8):c.fillRect(9*i+1,9*j+1,7,7));c.fillStyle=D?"#333":W?"#3c3":"#f33",c.fillRect(9*x+1,9*y+1,7,7)},onkeydown=(f,e=[-1,0,1,0],n=[0,-1,0,1],o=e[f.keyCode-37],r=n[f.keyCode-37],c=[],d=0)=>{if("r"==f.key)l(1);else if("z"==f.key&&u>1)[M,O,x,y,L,W,D]=structuredClone(U[--u-1]);else if(!W&&!D){for(t=1;t&lt;99&&(j=y+t*r,i=x+t*o,!(M[j][i]>4));t++)if(0==O[j][i]){for(;t--;)j=y+t*r,i=x+t*o,O[j+r][i+o]=O[j][i];y+=r,x+=o;break}for(j in O)for(i in O[j])if(O[j][i])if(5==O[j][i])for(d++,k=0;k&lt;4;k++)ny=+j+n[k],nx=+i+e[k],O[ny]?.[nx]&lt;6&&c.push({x:nx,y:ny}),y==ny&&x==nx&&(D=1);else if(O[j][i]&lt;5)for(d++,t=1;t&lt;99&&(ny=+j+t*n[O[j][i]-1],nx=+i+t*e[O[j][i]-1],!(M[ny]?.[nx]>4||6==O[ny]?.[nx]));t++){if(O[ny]?.[nx]&&O[ny]?.[nx]&lt;6){c.push({x:nx,y:ny});break}if(y==ny&&x==nx){D=1;break}}for(j in M[y][x]==1&&!D&&(W=1),Y=1,M)for(i in M[j])2!=M[j][i]||0!=O[j][i]||x==i&&y==j||(Y=0);if(Y!=L)for(j in M)for(i in M[j])7==M[j][i]?M[j][i]=3:3==M[j][i]&&(M[j][i]=7,O[j][i]&&(O[j][i]&lt;6&&d--,x==i&&y==j&&(D=1),O[j][i]=0));for(i of(L=Y,c))O[i.y][i.x]&&(d--,O[i.y][i.x]=0);if(!d)for(j in M)for(i in M[j])8==M[j][i]&&(M[j][i]=4);U[u++]=structuredClone([M,O,x,y,L,W,D]),W&&setTimeout("l(++p)",500)}l()},c=a.getContext("2d"),p=0,l(1)&lt;/script></pre>
-
-</details>
 
 <p>
 <p><details><summary><b>Rules (spoilers)</b></summary>
-<p>- You are the hero (red square)
-<br>- You need to reach the exit (blue square)
-<br>- You can push the crystals (grey squares) and the enemies (brown)
-<br>- Activate yellow buttons to toggle orange obstacles
-<br>- Goblins (brown squares) kill creatures around them (not in diagonal)
-<br>- Dragons (brown triangles) kill creatures placed in front of them (only one per move)
-<br>- Pink obstacles disappear when all enemies are neutralized
-<br>- All moving objects can be destroyed by a reappearing orange obstacle
+<p>- You are the hero.
+<br>- You need to reach the exit (green).
+<br>- You can push the crystals and the monsters.
+<br>- Goblins kill creatures around them (not in diagonal).
+<br>- Dragons kill creatures placed in front of them (only one per move).
+<br>- Yellow buttons toggle orange obstacles (they can destroy objects).
+<br>- Purple obstacles disappear when all the monsters are neutralized.
 </details>
 
-<p><b>Demo</b>
 <p>
 <button onclick="p=0,l(1)">Level 0</button> 
 <button onclick="l(p=1)">Level 1</button>
@@ -38,7 +30,7 @@
 <button onclick="l(p=7)">Bonus level 1</button>
 <button onclick="l(p=8)">Bonus level 2</button>
 <button onclick="custom()">Load custom level</button>
-<style>#a{transform-origin:top left;transform:scale(3)}</style>
+<style>#a{transform-origin:top left;transform:scale(.8); background: #fed}</style>
 <br>
 <br>
 <p>
@@ -50,33 +42,31 @@
 
 // Draw dragon bullets (aesthetic only, not counted in the score)
 bullets = () => {
-  var j, i, t, nx, ny, dirsx = [-1, 0, 1, 0], dirsy = [0, -1, 0, 1];
+  var j, i, t, n, dirs = [-1, -w, 1, w];
   
   // Loop on all objects
   for(j in O){
-    for(i in O[j]){
     
-      // If there's a dragon:
-      if(O[j][i] && O[j][i] < 5){
-      
-        // See neighbour cells in its direction
-        for(t = 1; t < 99; t++){
-          ny = +j + t * dirsy[O[j][i]-1];
-          nx = +i + t * dirsx[O[j][i]-1];
-          
-          // If we encounter a solid map item or a solid object or the hero, stop
-          if(M[ny]?.[nx] > 5 || O[ny]?.[nx] || (x == nx && y == ny)){
-            break;
-          }
-          
-          // Draw bullets
-          else {
-            c.fillStyle = "#531";
-            c.fillRect(nx * 9 + 3, ny * 9 + 3, 3, 3);
-          }
+    // If there's a dragon:
+    if(O[j] && O[j] < 5){
+    
+      // See neighbour cells in its direction
+      for(t = 1; t < 99; t++){
+        n = +j + t * dirs[O[j]-1];
+        console.log(n, M[n], O[n]);
+        
+        // If we encounter a solid map item or a solid object or the hero, stop
+        if(M[n] > 5 || O[n] || (_ == n)){
+          break;
         }
-      } 
-    }
+        
+        // Draw bullets
+        else {
+          c.fillStyle = "#531";
+          c.fillRect(j%w * 20 + 9, ((j/w)|0) * 20 + 9, 3, 3);
+        }
+      }
+    } 
   }
 }
 
@@ -132,127 +122,89 @@ P = [
 `190000,890000,00e0f0,e00f0A`,
 
 // 6: kill all dragons
-`18A00,99990,000a0,00000,0c000,00000`,
-
-// 7: kill dragon in orange trap
-`A0d7,0f07,0297,0091`
-
+`18A00,99990,000a0,00000,0c000,00000`
 
 ];
 
 // Level parsing/rendering
 l = (
-  // i, j, // loop vars
-  
+  // i, j, cell, // loop/temp vars
   parse, // 1: parse and draw / 0: draw only
-  
-  level = P[p].split(",")
+  level = P[p].split(",") // ASCII level
 ) => {
 
-  // Parse ASCII
-  if(parse){
+  // Get level dimensions
+  w = level[0].length; // level width
+  h = level.length; // level height
+  
+  // Set up canvas
+  a.width = w * 50;
+  a.height = h * 50;
+  c.font = "38px a";
 
-    // Globals
+  // Globals
+  if(parse){  
     M = []; // map
     O = []; // objects
-    B = []; // bullets
+    //B = []; // bullets
     W =     // win
     D =     // die
     Y =     // yellow buttons state
     L =     // last yellow buttons state
     E = 0;  // enemy counter
-  
-    for(j in level){
-      M[j] = [];
-      O[j] = [];
-      for(i in level[j]){
-        M[j][i] = O[j][i] = 0;
-        if(level[j][i] == "A"){  // Hero
-          x = +i;
-          y = +j;
-        }
-        else if(level[j][i] <= 9) M[j][i] = +level[j][i]; // Map
-        else O[j][i] = " abcdef".indexOf(level[j][i]); // Objects
+    _ = -1; // hero
+  }
+
+  // Loop on all the map
+  for(j = 0; j < h; j++){
+    for(i = 0; i < w; i++){
+    
+      // Sprite position
+      c.save();
+      c.translate(i*50+42-18, j*50+28);
+
+      // Coordinates
+      n = +j * w + i;
+          
+      // Parse
+      if(parse){
+        M[n] = 0;
+        O[n] = 0;
+      
+        // Hero
+        if(parse && level[j][i] == "A") _ = n;
+      
+        // Map
+        else if(parse && level[j][i] <= 9) M[n] = +level[j][i];
+      
+        // Objects
+        else if(parse && !(level[j][i] <= 9)) O[n] = " abcdef".indexOf(level[j][i]);
       }
+        
+      // Dragon sprite rotation
+      c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[n]], -27, 14);
+      c.rotate(1.57 * "0123"[O[n] - 1]);
+      c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[n]], -27, 14);
+      if(_ == n) c.fillText([..."🚶💀"][D], -27, 14);
+      c.restore();
     }
-    U = [structuredClone([M, O, x, y, L, W, D])]; // init undo history
+  }
+  if(parse){
+    U = [structuredClone([M, O, _, L, W, D])]; // init undo history
     u = 1; // init undo counter
   }
-  
-  // Draw scene
-  a.width = M[0].length * 9;
-  a.height = M.length * 9;
-  
-  // Map
-  for(j in M){
-    for(i in M[y]){
-      c.fillStyle = [
-        "#eee", // 0: ground
-        "#abf", // 1: exit
-        "#fd3", // 2: button
-        "#eee", // 3: toggle obstacle off
-        "#eee", // 4: enemies obstacle off
-        "#eee", // 5: gate
-        "#474", // 6: tree
-        "#fa2", // 7: toggle obstacle on
-        "#f8a", // 8: enemies obstacle on
-        "#000", // 9: wall
-      ][M[j][i]];
-      c.fillRect(i * 9, j * 9, 9, 9);
-    }
-  }
-  
-  // Objects
-  for(j in O){
-    for(i in O[j]){
-      if(O[j][i]){
-
-        c.fillStyle = O[j][i] == 6 ? "#888" : "#531";
-      
-        // Dragons
-        if(O[j][i] < 5){
-          c.fillText("◀▲▶▼"[O[j][i]-1], i * 9, j * 9 + 8);
-        }
-        
-        // Small squares (crystal, goblin)
-        else{
-          c.fillRect(i * 9 + 1, j * 9 + 1, 7, 7);
-        }
-      }
-    }
-  }
-  
-  // Hero
-  c.fillStyle = D ? "#333" : W ? "#3c3" : "#f33";
-  c.fillRect(x * 9 + 1, y * 9 + 1, 7, 7);
-  
-  // Bullets (bonus)
-  bullets();
 }
 
 // Keyboard input
 onkeydown = (
-  
-  // Temp vars
   e,          // event
   // i, j, k, l, // loop vars (x, y, direction, distance)
   // nx, ny,     // neighbour cell coordinates
   // cell,       // cell value
-
-  // 4 directions (X,Y offsets)
-  dirsx = [-1, 0, 1, 0],
-  dirsy = [0, -1, 0, 1],
-  
-  // Get arrow key direction
-  dirx = dirsx[e.keyCode - 37],
-  diry = dirsy[e.keyCode - 37],
-  
-  // Fatalities list
-  F = [],
-  
-  // Reset enemy counter
-  E = 0
-  
+  dirs = [-1, -w, 1, w], // 4 directions (X,Y offsets)
+  dir = dirs[e.keyCode - 37], // Get arrow key direction
+  F = [], // Fatalities list
+  E = 0 // Reset enemy counter
 ) => {
   
   // R = reset
@@ -262,7 +214,7 @@ onkeydown = (
   
   // Z = undo
   else if(e.key == "z" && u > 1){
-    [M, O, x, y, L, W, D] = structuredClone(U[--u-1]);
+    [M, O, _, L, W, D] = structuredClone(U[--u-1]);
   }
   
   // Arrow key pressed: move hero (and push objects) if possible
@@ -272,31 +224,33 @@ onkeydown = (
     for(t = 1; t < 99; t++){
     
       // Cell coordinates
-      j = y + t * diry;
-      i = x + t * dirx;
+      j = _ + t * dir;
+      
+      // If out of bounds: stop
+      if(j < 0 || (dir == 1 && (j%w) == 0) || (dir == -1 && (j%w) == w-1)){
+        break;
+      }
       
       // If there's a solid map item (map > 4): stop
-      if(M[j][i] > 4){
+      if(M[j] > 4){
         break;
       }
 
       // If we find an empty cell (any other map item + no object): move
-      else if(O[j][i] == 0){
+      else if(O[j] == 0){
         
         // Backtrack all the cells up to the hero
         for( ; t--; ){
         
           // Cell coordinates
-          j = y + t * diry;
-          i = x + t * dirx;
+          j = _ + t * dir;
         
           // Push objects away from the hero
-          O[j + diry][i + dirx] = O[j][i];
+          O[j+dir] = O[j];
         }
         
         // Move hero
-        y += diry;
-        x += dirx;
+        _ += dir;
         
         // Stop loop
         break;
@@ -305,65 +259,70 @@ onkeydown = (
     
     // Enemies: loop on all the objects
     for(j in O){
-      for(i in O[j]){
       
-        // If there's an object in the current cell
-        if(O[j][i]){
-      
-          // If it's a goblin
-          if(O[j][i] == 5){
+      // If there's an object in the current cell
+      if(O[j]){
+    
+        // If it's a goblin
+        if(O[j] == 5){
+        
+          // Update enemy counter
+          E++;
           
-            // Update enemy counter
-            E++;
-            
-            // Watch in 4 directions
-            for(k = 0; k < 4; k++){
+          // Watch in 4 directions
+          for(k = 4; k--;){
 
-              // Coordinates
-              ny = +j + dirsy[k];
-              nx = +i + dirsx[k];
+            // Coordinates
+            n = +j + dirs[k];
             
+            // Stay in bounds            
+            if(!((j%w) == 0 && k == 0 || (j%w) == w-1 && k == 2)){
+          
               // Kill goblins / dragons (obj < 6)
-              if(O[ny]?.[nx] < 6){
-                F.push({x: nx, y: ny});
+              if(O[n] < 6){
+                F.push(n);
               }
               
               // Kill hero
-              if(y == ny && x == nx){
+              if(n == _){
                 D = 1;
               }
             }
           }
+        }
 
-          // If it's a dragon
-          else if(O[j][i] < 5){
-          
-            // Update enemy counter
-            E++;        
-          
-            // Loop on all the cells in the dragon's direction
-            for(t = 1; t < 99; t++){
+        // If it's a dragon
+        else if(O[j] < 5){
+        
+          // Update enemy counter
+          E++;        
+        
+          // Loop on all the cells in the dragon's direction
+          for(t = 1; t < 99; t++){
 
-              // Cell coordinates
-              ny = +j + t * dirsy[O[j][i]-1];
-              nx = +i + t * dirsx[O[j][i]-1];
+            // Cell coordinates
+            n = +j + t * dirs[O[j]-1];
+            
+            // Stay in bounds
+            if((dirs[O[j]-1] == 1 && (n%w) == 0) || (dirs[O[j]-1] == -1 && (n%w) == w-1)){
+              break;
+            }
 
-              // Stop on solid tiles (map > 4) or crystal (obj = 6)
-              if(M[ny]?.[nx] > 4 || O[ny]?.[nx] == 6){
-                break;
-              }
-              
-              // Destroy other enemies (= any non-zero object)
-              if(O[ny]?.[nx] && O[ny]?.[nx] < 6){
-                F.push({x: nx, y: ny});
-                break;
-              }
+            // Stop on solid tiles (map > 4) or crystal (obj = 6)
+            if(M[n] > 4 || O[n] == 6){
+              break;
+            }
+            
+            // Destroy other enemies (= any non-zero object)
+            if(O[n] && O[n] < 6){
+              F.push(n);
+              break;
+            }
 
-              // Kill hero
-              if(y == ny && x == nx){
-                D = 1;
-                break;
-              }
+            // Kill hero
+            if(n == _){
+              D = 1;
+              break;
             }
           }
         }
@@ -371,7 +330,7 @@ onkeydown = (
     }
     
     // If hero's alive and his new cell is an exit: win
-    if(M[y][x] == 1 && !D){
+    if(M[_] == 1 && !D){
       
       // Win
       W = 1;
@@ -380,38 +339,35 @@ onkeydown = (
     // Check if all toggle buttons are pressed (by enemies or the hero)
     Y = 1;
     for(j in M){
-      for(i in M[j]){
-        if(M[j][i] == 2 && (O[j][i] == 0 && !(x == i && y == j))){
-          Y = 0;
-        }
+      if(M[j] == 2 && (O[j] == 0 && !(_ == j))){
+        Y = 0;
       }
     }
     
     // Toggle orange obstacles if the "toggle buttons" status has changed
     if(Y != L){
       for(j in M){
-        for(i in M[j]){
-          if(M[j][i] == 7) M[j][i] = 3;
-          else if(M[j][i] == 3){
-            M[j][i] = 7;
+      
+        if(M[j] == 7) M[j] = 3;
+        
+        else if(M[j] == 3){
+          M[j] = 7;
+          
+          // Destroy objects in the way when the obstacle appears
+          if(O[j]){
             
-            // Destroy objects in the way when the obstacle appears
-            if(O[j][i]){
-              
-              // Remove an enemy
-              if(O[j][i] < 6){
-                E--;
-              }
-              
-              // Kill hero
-              if(x == i && y == j){
-                D = 1;
-              }
-              
-              // Clear object
-              O[j][i] = 0;
+            // Remove an enemy
+            if(O[j] < 6){
+              E--;
             }
-            
+
+            // Clear object (enemy or crystal)
+            O[j] = 0;
+          }
+          
+          // Kill hero
+          if(_ == j){
+            D = 1;
           }
         }
       }
@@ -421,30 +377,26 @@ onkeydown = (
     L = Y;
     
     // Apply enemies fatalities
-    for(i of F){
-      if(O[i.y][i.x]){
+    for(j of F){
+      if(O[j]){
         E--;
-        O[i.y][i.x] = 0;
+        O[j] = 0;
       }
     }
     
     // If there are no living enemies, clear enemies obstacles
     if(!E){
       for(j in M){
-        for(i in M[j]){
-          if(M[j][i] == 8) M[j][i] = 4;
-        }
+        if(M[j] == 8) M[j] = 4;
       }
     }
-    
+
     // Save history
-    U[u++]=(structuredClone([M, O, x, y, L, W, D]));
+    U[u++] = structuredClone([M, O, _, L, W, D]);
     
     // Auto play next level after a win
     if(W){
-      setTimeout(()=>{
-        l(++p);
-      }, 500);
+      setTimeout("l(++p)", 500);
     }
   }
   
@@ -465,8 +417,12 @@ l(1);
 
 // Bonus levels
 
+
+// 7: kill dragon in orange trap
+P[7] = `A0d7,0f07,0297,0091`
+
 // 8: one kill per turn
-P[8] = `09009090981,00000000009,c0e0e0e0e00,000f0f0f0A0,90000000000,00090090090`;
+P[8] = `06006060681,00000000006,c0e0e0e0e00,000f0f0f0A0,60000000000,00060060060`;
 
 
 </script>
