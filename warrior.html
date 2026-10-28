@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS.
-<br>Engine size: 878b (508b gzipped) / Full demo size: 1691b (1021b gzipped)
+<br>Engine size: 878b (505b gzipped) / Full demo size: 1744b (1019b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p>
@@ -25,10 +25,10 @@
 <button onclick="l(p=4)">Level 4</button>
 <button onclick="l(p=5)">Level 5</button>
 <button onclick="l(p=6)">Level 6</button>
+<button onclick="l(p=7)">Level 7</button>
 
 <p>
-<button onclick="l(p=7)">Bonus level 1</button>
-<button onclick="l(p=8)">Bonus level 2</button>
+<button onclick="l(p=8)">Bonus level </button>
 <button onclick="custom()">Load custom level</button>
 <style>#a{transform-origin:top left;transform:scale(.8); background: #fed}</style>
 <br>
@@ -104,25 +104,28 @@ custom = () => {
 P = [
 
 // 0: push 1 crystal (inspired by Heroes 1-21)
-`0f00,A901`,
+"0f00,A901",
 
 // 1: push multiple crystals (inspired by Heroes 1-20)
-`009000900,Aff0ff001,009000900`,
+"009000900,Aff0ff001,009000900",
 
 // 2: button (inspired by Heroes 1-19)
-`00070,2f090,A0091`,
+"00070,2f090,A0091",
 
 // 3: goblins (inspired by Heroes 2-25)
-`0000e,A0000,0e901`,
+"0000e,A0000,0e901",
 
 // 4: dragons (inspired by Heroes 2-21)
-`1000,c000,90e0,90f0,9b0A`,
+"1000,c000,90e0,90f0,9b0A",
 
 // 5: kill all goblins (inspired by Heroes 2-11)
-`190000,890000,00e0f0,e00f0A`,
+"190000,890000,00e0f0,e00f0A",
 
 // 6: kill all dragons
-`18A00,99990,000a0,00000,0c000,00000`
+"18A00,99990,000a0,00000,0c000,00000",
+
+// 7: kill dragon in orange trap
+"A0d7,0f07,0297,0091"
 
 ];
 
@@ -182,7 +185,7 @@ l = (
       }
         
       // Dragon sprite rotation
-      c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[n]], -27, 14);
+      c.fillText([..." 🟩🟨  🚧🌳🟧🟪🧱"][M[n]], -27, 14);
       c.rotate(1.57 * "0123"[O[n] - 1]);
       c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[n]], -27, 14);
       if(_ == n) c.fillText([..."🚶💀"][D], -27, 14);
@@ -417,12 +420,8 @@ l(1);
 
 // Bonus levels
 
-
-// 7: kill dragon in orange trap
-P[7] = `A0d7,0f07,0297,0091`
-
 // 8: one kill per turn
-P[8] = `06006060681,00000000006,c0e0e0e0e00,000f0f0f0A0,60000000000,00060060060`;
+P[8] = "06006060681,00000000006,c0e0e0e0e00,000f0f0f0A0,60000000000,00060060060";
 
 
 </script>

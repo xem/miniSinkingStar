@@ -1,12 +1,15 @@
 ﻿<!doctype html>
 <script src='terser.5.14.1.js'></script>
+<script src="pako.min.js"></script>
+
 <body style="font:14px arial, sans-serif">
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
-<h3>MiniSinkingStar JS minifier + gzipper</h3>
+<h3>MiniSinkingStar JS minifier + Gzipper</h3>
 
 <p><b>JS code</b>
-<p><input type=checkbox id=mini checked> Minify
 <p>
+  <input type=checkbox id=mini checked> Minify
+</p>
 <textarea id=t rows=25 cols=80 placeholder="paste code here" style="width:95%;height:250px;font-size:8px"></textarea>
 
 <p><b>Raw size</b> <input readonly id=raw value=0> bytes
@@ -14,28 +17,15 @@
 <p><b>Gzip size</b> <input readonly id=gz value=0> bytes
 
 <script>
-
-// Gzip
-function compress(string, encoding) {
-  const byteArray = new TextEncoder().encode(string);
-  const cs = new CompressionStream(encoding);
-  const writer = cs.writable.getWriter();
-  writer.write(byteArray);
-  writer.close();
-  return new Response(cs.readable).arrayBuffer();
-}
-
-// Minify 
 let minify = async () => {
 
-  // JS
-  var js = rawjs = t.value;
-  if(mini.checked){
+  var js = t.value;
+  var rawjs = js;
   
+  if(mini.checked){
     js = js.replace(/;+$/,";");
     
-    // JS
-    terser = await Terser.minify(
+    let terser = await Terser.minify(
       js, 
       {
         toplevel: true,
@@ -43,7 +33,6 @@ let minify = async () => {
           passes: 5,
           unsafe: true,
           pure_getters: true,
-          //quote_style: 3
         }
       }
     )
@@ -53,15 +42,15 @@ let minify = async () => {
     t.value = js;
   }
   
-  const compressed = await compress(js, "gzip");
-  gz.value = compressed.byteLength;
-  min.value = mini.checked ? js.length : 0;
-  raw.value = rawjs.length
+  const originalBuffer = new TextEncoder().encode(js);
+  const compressed = pako.gzip(originalBuffer, { level: 9 });
+  gz.value = compressed.length;
+  min.value = mini.checked ? originalBuffer.length : 0;
+  raw.value = new TextEncoder().encode(rawjs).length;
 }
 
 onchange = oninput = () => {
   minify();
 }
-
-
 </script>
+</body>
