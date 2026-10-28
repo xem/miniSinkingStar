@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS.
-<br>Engine size: 868b (503b gzipped) / Full demo: 1732b (999b gzipped)
+<br>Engine size: 908b (513b gzipped) / Full demo: 1742b (991b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p>
@@ -222,7 +222,9 @@ onkeydown = (
   else if(!(W+D)){ // if not won and not dead
   
     // Loop on all the cells in the hero's target direction
-    for(t = 1; t < 99; t++){
+    for(t in M){
+    
+      t = +t+1;
     
       // Cell coordinates
       j = _ + t * dir;
@@ -259,7 +261,7 @@ onkeydown = (
     }
     
     // Enemies: loop on all the objects
-    for(j in O){
+    for(j in M){
       
       // If there's an object in the current cell
       if(O[j]){
@@ -271,13 +273,13 @@ onkeydown = (
           E++;
           
           // Watch in 4 directions
-          for(k = 4; k--;){
+          for(k of dirs){
 
             // Coordinates
-            n = +j + dirs[k];
+            n = +j+k;
             
             // Stay in bounds            
-            if(!((j%w) == 0 && k == 0 || (j%w) == w-1 && k == 2)){
+            if(!((j%w) == 0 && k == -1 || (j%w) == w-1 && k == 1)){
           
               // Kill goblins / dragons (obj < 6)
               if(O[n] < 6){
@@ -296,10 +298,10 @@ onkeydown = (
         if(O[j] < 5){
         
           // Update enemy counter
-          E++;        
+          E++;
         
           // Loop on all the cells in the dragon's direction
-          for(t = 1; t < 99; t++){
+          for(t in M){
 
             // Cell coordinates
             n = +j + t * dirs[O[j]-1];
@@ -314,8 +316,8 @@ onkeydown = (
               break;
             }
             
-            // Destroy other enemies (= any non-zero object)
-            if(O[n] && O[n] < 6){
+            // Destroy other enemies (obj = 1-5)
+            if(O[n] < 6){
               F.push(n);
               break;
             }
@@ -359,7 +361,7 @@ onkeydown = (
             
             // Remove an enemy
             if(O[j] < 6){
-              E--;
+              F.push(n);
             }
 
             // Clear object (enemy or crystal)
