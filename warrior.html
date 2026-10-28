@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS.
-<br>Engine size: 878b (505b gzipped) / Full demo size: 1744b (1019b gzipped)
+<br>Engine size: 878b (505b gzipped) / Full demo size: 1744b (1012b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset.
 
 <p>
@@ -39,36 +39,6 @@
 
 // Helpers
 // =======
-
-// Draw dragon bullets (aesthetic only, not counted in the score)
-bullets = () => {
-  var j, i, t, n, dirs = [-1, -w, 1, w];
-  
-  // Loop on all objects
-  for(j in O){
-    
-    // If there's a dragon:
-    if(O[j] && O[j] < 5){
-    
-      // See neighbour cells in its direction
-      for(t = 1; t < 99; t++){
-        n = +j + t * dirs[O[j]-1];
-        console.log(n, M[n], O[n]);
-        
-        // If we encounter a solid map item or a solid object or the hero, stop
-        if(M[n] > 5 || O[n] || (_ == n)){
-          break;
-        }
-        
-        // Draw bullets
-        else {
-          c.fillStyle = "#531";
-          c.fillRect(j%w * 20 + 9, ((j/w)|0) * 20 + 9, 3, 3);
-        }
-      }
-    } 
-  }
-}
 
 // Custom level
 custom = () => {
@@ -119,7 +89,7 @@ P = [
 "1000,c000,90e0,90f0,9b0A",
 
 // 5: kill all goblins (inspired by Heroes 2-11)
-"190000,890000,00e0f0,e00f0A",
+"180000,990000,90e0f0,e00f0A",
 
 // 6: kill all dragons
 "18A00,99990,000a0,00000,0c000,00000",
