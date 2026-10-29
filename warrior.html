@@ -2,9 +2,9 @@
 <body style="font:14px arial, sans-serif">
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
-<p>Tiny (1kb) "Sinking Star Wizard" implementation in HTML+JS
-<br>Engine size: 888b (492b gzipped) / Full demo: 1806b (1011b gzipped)
-<br>Play with arrow keys / Z to undo / R to reset / L to load a custom level
+<p>Tiny "Sinking Star Wizard" implementation in HTML+JS
+<br>Game engine: 922b (509b gzipped) / <a href="warrior.min.html">Full demo</a>: 1832b (1027b gzipped)
+<br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
 <p><details><summary><b>Rules (spoilers)</b></summary>
@@ -222,7 +222,8 @@ onkeydown = (
 
   // Load custom level/code
   else if(e.key == "l"){
-    eval(prompt());
+    zzz=1;
+    //eval(prompt());
   }
 
   // Arrow key pressed: move hero (and push objects)
