@@ -167,36 +167,36 @@ l = (
   }
 
   // Loop on all the map
-  level.map((value, j)=>{
+  level.map((value, index)=>{
     
     // Sprite position
     c.save();
-    c.translate((j%w)*50+42-18, ((j/w)|0)*50+28);
+    c.translate((index%w)*50+42-18, ((index/w)|0)*50+28);
         
     // Parse
     if(parse){
     
       // Blank cells by default (map/opjects)
-      M[j] = O[j] = 0;
+      M[index] = O[index] = 0;
     
       // Hero (A)
-      if(value == "A") _ = +j;
+      if(value == "A") _ = index;
     
       // Map (0-9)
-      else if(value < 10) M[j] = +value;
+      else if(value < 10) M[index] = value;
     
       // Objects (a-f) + dragon rotation
-      else c.rotate(1.57 * "00123"[O[j] = " abcdef".indexOf(value)]);
+      else c.rotate(1.57 * "00123"[O[index] = " abcdef".indexOf(value)]);
     }
       
     // Draw map
-    c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[j]], -27, 14);
+    c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[index]], -27, 14);
     
     // Draw objects
-    c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[j]], -27, 14);
+    c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
     
     // Draw hero
-    if(_ == j) c.fillText([..."🚶💀"][D], -27, 14);
+    if(_ == index) c.fillText([..."🚶💀"][D], -27, 14);
     
     c.restore();
   });
