@@ -93,11 +93,11 @@ P = [
 "0e901",
 
 // 4: dragons (inspired by Heroes 2-21)
-"1000"+
-"c000"+
-"90e0"+
-"90f0"+
-"9b0A",
+"10000"+
+"c0000"+
+"900e0"+
+"900f0"+
+"90b0A",
 
 // 5: kill all goblins (inspired by Heroes 2-11)
 "180000"+
@@ -139,24 +139,19 @@ P = [
 ];
 
 // Puzzles sizes
-S = [4,9,5,5,4,6,5,7,4,11];
-
+S = [4,9,5,5,5,6,5,7,4,11];
 
 // Level parsing / rendering
 l = (
   // i, j, cell,  // loop/temp vars
   parse,          // 1: parse and draw / 0: draw only
   level = P[p],   // ASCII level
-  s = S[p]        // level size
 ) => {
 
-  // Get level dimensions
-  w = s; // level width
-  h = level.length/s; // level height
-  
   // Set up canvas
+  w = S[p];
   a.width = w * 50;
-  a.height = h * 50;
+  a.height = level.length/w * 50;
   c.font = "38px a";
 
   // Globals
@@ -180,28 +175,35 @@ l = (
         
     // Parse
     if(parse){
-      M[j] = 0;
-      O[j] = 0;
     
-      // Hero
+      // Blank cells by default (map/opjects)
+      M[j] = O[j] = 0;
+    
+      // Hero (A)
       if(level[j] == "A") _ = +j;
     
-      // Map
-      else if(level[j] <= 9) M[j] = +level[j];
+      // Map (0-9)
+      else if(level[j] < 10) M[j] = +level[j];
     
-      // Objects
-      else O[j] = " abcdef".indexOf(level[j]);
+      // Objects (a-f) + dragon rotation
+      else c.rotate(1.57 * "00123"[O[j] = " abcdef".indexOf(level[j])]);
     }
       
-    // Dragon sprite rotation
+    // Draw map
     c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[j]], -27, 14);
-    c.rotate(1.57 * "0123"[O[j] - 1]);
+    
+    // Draw objects
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[j]], -27, 14);
+    
+    // Draw hero
     if(_ == j) c.fillText([..."🚶💀"][D], -27, 14);
+    
     c.restore();
   }
+  
+  // Init undo history
   if(parse){
-    U = [structuredClone([M, O, _, L, W, D])]; // init undo history
+    U = [structuredClone([M, O, _, L, W, D])];
     u = 1;
   }
 }
