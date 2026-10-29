@@ -62,33 +62,33 @@
 // Puzzles
 P = [
 
-// 0: push 1 crystal (inspired by Heroes 1-21)
+// 0: push 1 crystal
 "0f00"+
 "A901",
 
-// 1: push multiple crystals (inspired by Heroes 1-20)
+// 1: push multiple crystals
 "009000900"+
 "Aff0ff001"+
 "009000900",
 
-// 2: button (inspired by Heroes 1-19)
+// 2: button
 "00070"+
 "2f090"+
 "A0091",
 
-// 3: goblins (inspired by Heroes 2-25)
+// 3: goblins
 "0000e"+
 "A0000"+
 "0e901",
 
-// 4: dragons (inspired by Heroes 2-21)
+// 4: dragons
 "10000"+
 "c0000"+
 "900e0"+
 "900f0"+
 "90b0A",
 
-// 5: kill all goblins (inspired by Heroes 2-11)
+// 5: kill all goblins
 "180000"+
 "990000"+
 "90e0f0"+
@@ -111,13 +111,15 @@ P = [
 "8000000"+
 "1999999",
 
-// 8: kill dragon in orange trap
+// ?: kill 3 elemies
+
+// 8: kill dragon with button
 "A0d7"+
 "0f07"+
 "0297"+
 "0091",
 
-// 9: one kill per turn
+// 9: dragons do one kill per turn
 "06006060681"+
 "00000000006"+
 "c0e0e0e0e00"+
@@ -132,14 +134,12 @@ S = [4,9,5,5,5,6,5,7,4,11];
 
 // Level parsing / rendering
 l = (
-  // i, j, cell,  // loop/temp vars
-  parse,          // 1: parse and draw / 0: draw only
-  level = [...P[p]],   // ASCII level
+  parse,              // 1: parse and draw / 0: draw only
 ) => {
 
   // Set up canvas
   a.width = S[p] * 50;
-  a.height = level.length/S[p] * 50;
+  a.height = [...P[p]].length/S[p] * 50;
   c.font = "38px a";
 
   // Globals
@@ -155,7 +155,7 @@ l = (
   }
 
   // Loop on all the map
-  level.map((value, index)=>{
+  [...P[p]].map((value, index)=>{
 
     // Sprite position
     c.save();
@@ -235,7 +235,7 @@ onkeydown = (
     for(t in M){
 
       // Cell coordinates
-      j = _ + ++t * dir;
+      j = _ + dir * ++t;
 
       // If out of bounds: stop
       if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){
@@ -304,7 +304,7 @@ onkeydown = (
             for(t in M){
 
               // Cell coordinates
-              n = +j + ++t * dirs[O[j]-1];
+              n = +j + dirs[O[j]-1] * ++t;
 
               // Stay in bounds
               if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){
