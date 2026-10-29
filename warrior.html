@@ -186,13 +186,14 @@ l = (
       else if(value < 10) M[index] = value;
     
       // Objects (a-f) + dragon rotation
-      else c.rotate(1.57 * "00123"[O[index] = " abcdef".indexOf(value)]);
+      else O[index] = " abcdef".indexOf(value);
     }
       
     // Draw map
     c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[index]], -27, 14);
     
     // Draw objects
+    c.rotate(1.57 * "00123"[O[index]]);
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
     
     // Draw hero
