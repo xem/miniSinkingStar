@@ -138,9 +138,8 @@ l = (
 ) => {
 
   // Set up canvas
-  w = S[p];
-  a.width = w * 50;
-  a.height = level.length/w * 50;
+  a.width = S[p] * 50;
+  a.height = level.length/S[p] * 50;
   c.font = "38px a";
 
   // Globals
@@ -160,7 +159,7 @@ l = (
 
     // Sprite position
     c.save();
-    c.translate((index%w)*50+42-18, ((index/w)|0)*50+28);
+    c.translate((index%S[p])*50+42-18, ((index/S[p])|0)*50+28);
 
     // Parse
     if(parse){
@@ -204,7 +203,7 @@ onkeydown = (
   // i, j, k, l,  // loop vars (x, y, direction, distance)
   // nx, ny,      // neighbour cell coordinates
   // cell,        // cell value
-  dirs = [-1, -w, 1, w], // 4 directions (X,Y offsets)
+  dirs = [-1, -S[p], 1, S[p]], // 4 directions (X,Y offsets)
   dir = dirs[e.keyCode - 37], // Get arrow key direction
   F = [],         // Fatalities list
   E = 0,          // Reset enemy counter
@@ -239,7 +238,7 @@ onkeydown = (
       j = _ + ++t * dir;
 
       // If out of bounds: stop
-      if((dir == 1 && (j%w) == 0) || (dir == -1 && (j%w) == w-1)){
+      if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){
         break;
       }
 
@@ -280,7 +279,7 @@ onkeydown = (
               n = +j+k;
 
               // Stay in bounds
-              if(!((j%w) == 0 && k == -1 || (j%w) == w-1 && k == 1)){
+              if(!((j%S[p]) == 0 && k == -1 || (j%S[p]) == S[p]-1 && k == 1)){
 
                 // Kill goblins / dragons (obj < 6)
                 if(O[n] && O[n] < 6){
@@ -308,7 +307,7 @@ onkeydown = (
               n = +j + ++t * dirs[O[j]-1];
 
               // Stay in bounds
-              if((dirs[O[j]-1] == 1 && (n%w) == 0) || (dirs[O[j]-1] == -1 && (n%w) == w-1)){
+              if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){
                 break;
               }
 
