@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS
-<br>Game engine: 908b (500b gzipped) / <a href="warrior.min.html">Full demo</a>: 1785b (997b gzipped)
+<br>Game engine: 925b (508b gzipped) / <a href="warrior.min.html">Full demo</a>: 1858b (1023b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
@@ -29,6 +29,7 @@
 <button onclick="l(p=7)">7</button>
 <button onclick="l(p=8)">8</button>
 <button onclick="l(p=9)">9</button>
+<button onclick="l(p=10)">10</button>
 <button onclick="eval(prompt('ASCII level', ''))">Load custom level</button>
 <style>#a{transform-origin:top left;transform:scale(.8); background: #fed}</style>
 <br>
@@ -102,7 +103,13 @@ P = [
 "0c000"+
 "00000",
 
-// 7: kill a goblin and a dragon
+// 7: kill dragon with button
+"A0d7"+
+"0f07"+
+"0297"+
+"0091",
+
+// 8: kill a goblin and a dragon
 "9000A00"+
 "9000000"+
 "90efffa"+
@@ -111,15 +118,16 @@ P = [
 "8000000"+
 "1999999",
 
-// ?: kill 3 enemies
+// 9: kill 3 enemies
+"1800000"+
+"66000f0"+
+"00ffef0"+
+"00fef00"+
+"00ef000"+
+"0ff0000"+
+"000000A",
 
-// 8: kill dragon with button
-"A0d7"+
-"0f07"+
-"0297"+
-"0091",
-
-// 9: dragons do one kill per turn
+// 10: dragons do one kill per turn
 "06006060681"+
 "00000000006"+
 "c0e0e0e0e00"+
@@ -130,7 +138,7 @@ P = [
 ];
 
 // Puzzles sizes
-S = [4,9,5,5,5,6,5,7,4,11];
+S = [4,9,5,5,5,6,5,4,7,7,11];
 
 // Level parsing / rendering
 l = (
@@ -150,8 +158,8 @@ l = (
     W =       // win
     D =       // die
     Y =       // yellow buttons state
-    E =       // enemy counter
-    m = 0     // have we moved
+    E = 0;      // enemy counter
+    m = 1;     // have we moved
     _ = -1;   // hero
   }
 
@@ -202,14 +210,11 @@ onkeydown = (
   E = 0                         // Reset enemy counter
 ) => {
 
-  // Reset move flag
-  m = 0;
-
   // R = reset
   if(e.key == "r"){ l(1); }
 
-  // Z = undo and cancel death
-  else if(e.key == "z"){ [M, O, _] = U.pop(D = 0); }
+  // Z = undo and cancel death if we're dead
+  else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(D = 0, m = 1); }
 
   // Load custom level/code
   else if(e.key == "l"){ evalprompt(); }
@@ -219,6 +224,7 @@ onkeydown = (
     
     // Save last move
     U.push([[...M], [...O], _]);
+    m = 0;
 
     // Loop on all the cells in the hero's target direction
     for(t in M){
@@ -369,8 +375,10 @@ onkeydown = (
 
         // Apply enemies fatalities
         for(j of F){
-          E--;
-          O[j] = 0;
+          if(O[j]){
+            E--;
+            O[j] = 0;
+          }
         }
 
         // If there are no living enemies, clear enemies obstacles
@@ -389,13 +397,13 @@ onkeydown = (
         break;
       }
     }
-
-    // If no move was done: remove last undo history
-    if(!m) U.pop();
   }
 
   // Render
   l();
+  
+  // If no move was done: remove last undo
+  if(!m) U.pop();
 }
 
 // Canvas2D
