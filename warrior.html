@@ -19,17 +19,17 @@
 
 <p><b>Demo</b>
 <p>
-<button onclick="p=0,l(1)">0</button>
-<button onclick="l(p=1)">1</button>
-<button onclick="l(p=2)">2</button>
-<button onclick="l(p=3)">3</button>
-<button onclick="l(p=4)">4</button>
-<button onclick="l(p=5)">5</button>
-<button onclick="l(p=6)">6</button>
-<button onclick="l(p=7)">7</button>
-<button onclick="l(p=8)">8</button>
-<button onclick="l(p=9)">9</button>
-<button onclick="l(p=10)">10</button>
+<button onclick="p=0,l(1)">1</button>
+<button onclick="l(p=1)">2</button>
+<button onclick="l(p=2)">3</button>
+<button onclick="l(p=3)">4</button>
+<button onclick="l(p=4)">5</button>
+<button onclick="l(p=5)">6</button>
+<button onclick="l(p=6)">7</button>
+<button onclick="l(p=7)">8</button>
+<button onclick="l(p=8)">9</button>
+<button onclick="l(p=9)">10</button>
+<button onclick="l(p=10)">11</button>
 <button onclick="eval(prompt('ASCII level', ''))">Load custom level</button>
 <style>#a{transform-origin:top left;transform:scale(.8); background: #fed}</style>
 <br>
@@ -37,6 +37,8 @@
 <p>
 <canvas id=a style=border:solid+9px>
 <script>
+
+evalprompt = () => eval(prompt("custom level"));
 
 /* ===== GOLF STARTS HERE ===== */
 
