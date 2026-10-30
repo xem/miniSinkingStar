@@ -1,0 +1,383 @@
+
+/* ===== GOLF STARTS HERE ===== */
+
+// Canvas 2D
+c = a.getContext("2d");
+
+// Current puzzle
+p = 0;
+
+// Map:
+// 0: ground
+// 1: exit
+// 2: toggle obstacle button
+// 3: toggle obstacle open
+// 4: enemies alive obstacle open
+// 5: gate
+// 6: tree
+// 7: toggle obstacle closed
+// 8: enemies alive obstacle closed
+// 9: wall
+// a: dragon left => 1
+// b: dragon up => 2
+// c: dragon right => 3
+// d: dragon down => 4
+// e: goblin => 5
+// f: crystal => 6
+// A: hero
+
+// Puzzles
+P = [
+
+// 0: push 1 crystal
+"0f00"+
+"A901",
+
+// 1: push multiple crystals
+"009000900"+
+"Aff0ff001"+
+"009000900",
+
+// 2: button
+"00070"+
+"2f090"+
+"A0091",
+
+// 3: goblins
+"0000e"+
+"A0000"+
+"0e901",
+
+// 4: dragons
+"10000"+
+"c0000"+
+"900e0"+
+"900f0"+
+"90b0A",
+
+// 5: kill all goblins
+"180000"+
+"990000"+
+"90e0f0"+
+"e00f0A",
+
+// 6: kill all dragons
+"18A00"+
+"99990"+
+"000a0"+
+"00000"+
+"0c000"+
+"00000",
+
+// 7: kill a goblin and a dragon
+"9000A00"+
+"9000000"+
+"90efffa"+
+"0000000"+
+"0000000"+
+"8000000"+
+"1999999",
+
+// ?: kill 3 enemies
+
+// 8: kill dragon with button
+"A0d7"+
+"0f07"+
+"0297"+
+"0091",
+
+// 9: dragons do one kill per turn
+"06006060681"+
+"00000000006"+
+"c0e0e0e0e00"+
+"000f0f0f0A0"+
+"60000000000"+
+"00060060060"
+
+];
+
+// Puzzles sizes
+S = [4,9,5,5,5,6,5,7,4,11];
+
+// Function that does everything (parse/render/logic)
+(Z = onkeyup = (
+  e,                            // event / 0: render / 1: parse + render / 2: logic without move
+  dirs = [-1, -S[p], 1, S[p]],  // directions
+  dir = dirs[e.keyCode - 37],   // current direction
+  F = [],                       // fatalities list
+  E = 0,                        // enemy counter
+  moved = 0                     // have we moved
+) => {
+
+  // if a direction is pressed: run the game's logic
+  if(dir || e == 2){
+    
+    // If not won and not dead
+    if(!(W+D)){
+
+      // Loop on all the cells in the hero's target direction
+      for(t in M){
+
+        // Cell coordinates
+        j = _ + dir * ++t;
+
+        // If out of bounds: stop
+        if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){
+          break;
+        }
+
+        // If there's a solid map item (map > 4): stop
+        if(M[j] > 4){
+          break;
+        }
+
+        // If we find an empty cell (any other map item + no object): move
+        else if(O[j] == 0){
+
+          // Backtrack all the cells up to the hero
+          for( ; t--; ){
+
+            // Cell coordinates
+            j = _ + t * dir;
+
+            // Push objects away from the hero
+            O[j+dir] = O[j];
+          }
+
+          // Move hero
+          _ += dir;
+
+          // Enemies: loop on all the objects
+          for(j in M){
+
+            // If it's a goblin
+            if(O[j] == 5){
+
+              // Update enemy counter
+              E++;
+
+              // Watch in 4 directions
+              for(k of dirs){
+
+                // Coordinates
+                n = +j+k;
+
+                // Stay in bounds
+                if(!((j%S[p]) == 0 && k == -1 || (j%S[p]) == S[p]-1 && k == 1)){
+
+                  // Kill goblins / dragons (obj < 6)
+                  if(O[n] && O[n] < 6){
+                    F.push(n);
+                  }
+
+                  // Kill hero
+                  if(n == _){
+                    D = 1;
+                  }
+                }
+              }
+            }
+
+            // If it's a dragon
+            if(O[j] && O[j] < 5){
+
+              // Update enemy counter
+              E++;
+
+              // Loop on all the cells in the dragon's direction
+              for(t in M){
+
+                // Cell coordinates
+                n = +j + dirs[O[j]-1] * ++t;
+
+                // Stay in bounds
+                if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){
+                  break;
+                }
+
+                // Stop on solid tiles (map > 4) or crystal (obj = 6)
+                if(M[n] > 4 || O[n] == 6){
+                  break;
+                }
+
+                // Destroy other enemies (obj = 1-5)
+                if(O[n] && O[n] < 6){
+                  F.push(n);
+                  break;
+                }
+
+                // Kill hero
+                if(n == _){
+                  D = 1;
+                  break;
+                }
+              }
+            }
+          }
+
+          // If hero's alive and his new cell is an exit: win
+          if(M[_] == 1 && !D){
+
+            // Win
+            W = 1;
+          }
+
+          // Check if all toggle buttons are pressed (by enemies or the hero)
+          Y = 1;
+          for(j in M){
+            if(M[j] == 2 && (O[j] == 0 && !(_ == j))){
+              Y = 0;
+            }
+          }
+
+          // Toggle orange obstacles if the "toggle buttons" status has changed
+          if(Y != L){
+            for(j in M){
+
+              if(M[j] == 7) M[j] = 3;
+
+              else if(M[j] == 3){
+                M[j] = 7;
+
+                // Destroy objects in the way when the obstacle appears
+                if(O[j]){
+
+                  // Remove an enemy
+                  if(O[j] < 6){
+                    F.push(n);
+                  }
+
+                  // Clear object (enemy or crystal)
+                  O[j] = 0;
+                }
+
+                // Kill hero
+                if(_ == j){
+                  D = 1;
+                }
+              }
+            }
+          }
+
+          // Save toggle buttons status
+          L = Y;
+
+          // Apply enemies fatalities
+          for(j of F){
+            if(O[j]){
+              E--;
+              O[j] = 0;
+            }
+          }
+
+          // If there are no living enemies, clear enemies obstacles
+          if(!E){
+            for(j in M){
+              if(M[j] == 8) M[j] = 4;
+            }
+          }
+
+          // Auto play next level after a win
+          if(W){
+            setTimeout("p++,Z(1)", 500);
+          }
+          
+          moved = 1;
+
+          // Stop loop after 1 move done
+          break;
+        }
+      }
+    }
+    
+    // update history
+    if(e == 2 || moved) U.push(structuredClone([M, O, _, L, W, D]));
+    
+    // render
+    Z(0);
+  }
+  
+  // else: do other actions
+  else {
+    
+    // if a key is pressed
+    if(e.key){
+    
+      // Z = undo
+      if(e.key == "z"){
+        [M, O, _, L, W, D] = structuredClone(U.pop());
+        Z(0);
+      }
+      
+      // R = reset
+      else if(e.key == "r"){
+        Z(1);
+      }
+      
+      // L = load
+      else if(e.key == "l"){
+        evalprompt=1;
+      }
+    }
+    
+    // parse / render (parse if e == 1)
+    else {
+    
+      // reset canvas
+      a.width = S[p] * 50;
+      a.height = [...P[p]].length/S[p] * 50;
+      c.font = "1cm a";
+
+      // parse: set globals
+      if(e){
+        U = [];                         // undo history
+        M = [O = [W = D = Y = L = 0]];  // map / objects / win / die / yellow / last yellow
+        _ = -1;                         // hero
+      }
+      
+      // loop on all the map
+      [...P[p]].map((value, index) => {
+
+        // go to sprite position
+        c.save();
+        c.translate((index%S[p])*50+42-18, ((index/S[p])|0)*50+28);
+
+        // parse
+        if(e){
+
+          // blank cells by default (map/opjects)
+          M[index] = O[index] = 0;
+
+          // hero (A)
+          if(value == "A") _ = index;
+
+          // map (0-9)
+          else if(value < 10) M[index] = value;
+
+          // objects (a-f) + dragon rotation
+          else O[index] = " abcdef".indexOf(value);
+        }
+
+        // draw map
+        c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[index]], -27, 14);
+
+        // draw objects
+        c.rotate(1.57 * "00123"[O[index]]);
+        c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
+
+        // draw hero
+        if(_ == index) c.fillText([..."🚶💀"][D], -27, 14);
+
+        c.restore();
+      });
+
+      // parse: run the logic once
+      if(e){
+        Z(2);
+      }
+    }
+  }
+})(1)
+
+
+/* ===== GOLF ENDS HERE ===== */

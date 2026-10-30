@@ -134,7 +134,7 @@ S = [4,9,5,5,5,6,5,7,4,11];
 
 // Level parsing / rendering
 l = (
-  parse,              // 1: parse and draw / 0: draw only
+  parse, // 1: parse and draw / 0: draw only
 ) => {
 
   // Set up canvas
@@ -144,18 +144,20 @@ l = (
 
   // Globals
   if(parse){
-    M = []; // map
-    O = []; // objects
-    W =     // win
-    D =     // die
-    Y =     // yellow buttons state
-    L =     // last yellow buttons state
-    E = 0;  // enemy counter
-    _ = -1; // hero
+    M = [];   // map
+    O = [];   // objects
+    U = [];   // undo history
+    W =       // win
+    D =       // die
+    Y =       // yellow buttons state
+    L =       // last yellow buttons state
+    E =       // enemy counter
+    moved = 0 // have we moved
+    _ = -1;   // hero
   }
 
   // Loop on all the map
-  [...P[p]].map((value, index)=>{
+  [...P[p]].map((value, index) => {
 
     // Sprite position
     c.save();
@@ -189,12 +191,8 @@ l = (
 
     c.restore();
   });
-
-  // Init undo history
-  if(parse){
-    U = [structuredClone([M, O, _, L, W, D])];
-    u = 1;
-  }
+  
+  if(parse) U.push(structuredClone([M, O, _, L, W, D]));
 }
 
 // Keyboard input
@@ -215,14 +213,13 @@ onkeydown = (
   }
 
   // Z = undo
-  else if(e.key == "z" && u > 1){
-    [M, O, _, L, W, D] = structuredClone(U[--u-1]);
+  else if(e.key == "z"){
+    [M, O, _, L, W, D] = structuredClone(U.pop());
   }
 
   // Load custom level/code
   else if(e.key == "l"){
-    zzz=1;
-    //eval(prompt());
+    evalprompt();
   }
 
   // Arrow key pressed: move hero (and push objects)
@@ -230,6 +227,12 @@ onkeydown = (
 
   // If not won and not dead
   if(!(W+D)){
+  
+    // save last move
+    if(moved){
+      U.push(structuredClone([M, O, _, L, W, D]));
+    }
+    moved = 0;
 
     // Loop on all the cells in the hero's target direction
     for(t in M){
@@ -399,7 +402,7 @@ onkeydown = (
         }
 
         // Save history
-        U[u++] = (structuredClone([M, O, _, L, W, D]));
+        moved = 1;
 
         // Stop loop after 1 move done
         break;
