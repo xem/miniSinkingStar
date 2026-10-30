@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS
-<br>Game engine: 953b (514b gzipped) / <a href="warrior.min.html">Full demo</a>: 1869b (1024b gzipped)
+<br>Game engine: 908b (500b gzipped) / <a href="warrior.min.html">Full demo</a>: 1785b (997b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
@@ -150,9 +150,8 @@ l = (
     W =       // win
     D =       // die
     Y =       // yellow buttons state
-    L =       // last yellow buttons state
     E =       // enemy counter
-    moved = 0 // have we moved
+    m = 0     // have we moved
     _ = -1;   // hero
   }
 
@@ -189,50 +188,37 @@ l = (
     // Draw hero
     if(_ == index) c.fillText([..."🚶💀"][D], -27, 14);
 
+    // reset canvas context
     c.restore();
   });
-  
-  if(parse) U = [M, O, _, L, W, D];
 }
 
 // Keyboard input
 onkeydown = (
-  e,              // event
-  // i, j, k, l,  // loop vars (x, y, direction, distance)
-  // nx, ny,      // neighbour cell coordinates
-  // cell,        // cell value
-  dirs = [-1, -S[p], 1, S[p]], // 4 directions (X,Y offsets)
-  dir = dirs[e.keyCode - 37], // Get arrow key direction
-  F = [],         // Fatalities list
-  E = 0,          // Reset enemy counter
+  e,                            // event
+  dirs = [-1, -S[p], 1, S[p]],  // 4 directions (X,Y offsets)
+  dir = dirs[e.keyCode - 37],   // Get arrow key direction
+  F = [],                       // Fatalities list
+  E = 0                         // Reset enemy counter
 ) => {
 
-  // R = reset
-  if(e.key == "r"){
-    l(1);
-  }
+  // Reset move flag
+  m = 0;
 
-  // Z = undo
-  else if(e.key == "z"){
-    [M, O, _, L, W, D] = structuredClone(U.pop());
-  }
+  // R = reset
+  if(e.key == "r"){ l(1); }
+
+  // Z = undo and cancel death
+  else if(e.key == "z"){ [M, O, _] = U.pop(D = 0); }
 
   // Load custom level/code
-  else if(e.key == "l"){
-    evalprompt();
-  }
+  else if(e.key == "l"){ evalprompt(); }
 
   // Arrow key pressed: move hero (and push objects)
-  else
-
-  // If not won and not dead
-  if(!(W+D)){
-  
-    // save last move
-    if(moved){
-      U.push(structuredClone([M, O, _, L, W, D]));
-    }
-    moved = 0;
+  else if(!(W+D)){
+    
+    // Save last move
+    U.push([[...M], [...O], _]);
 
     // Loop on all the cells in the hero's target direction
     for(t in M){
@@ -265,6 +251,7 @@ onkeydown = (
 
         // Move hero
         _ += dir;
+        m = 1;
 
         // Enemies: loop on all the objects
         for(j in M){
@@ -349,13 +336,15 @@ onkeydown = (
           }
         }
 
-        // Toggle orange obstacles if the "toggle buttons" status has changed
-        if(Y != L){
-          for(j in M){
-
-            if(M[j] == 7) M[j] = 3;
-
-            else if(M[j] == 3){
+        // Toggle orange obstacles accordingly
+        for(j in M){
+        
+          if(P[p][j] == 7){
+          
+            M[j] = 3; // off (default)
+            
+            if(!Y){   // on (all buttons pressed)
+            
               M[j] = 7;
 
               // Destroy objects in the way when the obstacle appears
@@ -363,10 +352,10 @@ onkeydown = (
 
                 // Remove an enemy
                 if(O[j] < 6){
-                  F.push(n);
+                  E--;
                 }
 
-                // Clear object (enemy or crystal)
+                // Remove any object (enemy or crystal)
                 O[j] = 0;
               }
 
@@ -378,15 +367,10 @@ onkeydown = (
           }
         }
 
-        // Save toggle buttons status
-        L = Y;
-
         // Apply enemies fatalities
         for(j of F){
-          if(O[j]){
-            E--;
-            O[j] = 0;
-          }
+          E--;
+          O[j] = 0;
         }
 
         // If there are no living enemies, clear enemies obstacles
@@ -401,13 +385,13 @@ onkeydown = (
           setTimeout("l(++p)", 500);
         }
 
-        // Save history
-        moved = 1;
-
         // Stop loop after 1 move done
         break;
       }
     }
+
+    // If no move was done: remove last undo history
+    if(!m) U.pop();
   }
 
   // Render
@@ -424,6 +408,5 @@ p = 0;
 l(1);
 
 /* ===== GOLF ENDS HERE ===== */
-
 
 </script>
