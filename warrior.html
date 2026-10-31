@@ -144,7 +144,7 @@ S = [4,9,5,5,5,6,5,4,7,7,11];
 
 // Level parsing / rendering
 l = (
-  parse, // 1: parse and draw / 0: draw only
+  parse  // 1: parse and draw / 0: draw only
 ) => {
 
   // Set up canvas
@@ -179,13 +179,13 @@ l = (
       M[index] = O[index] = 0;
 
       // Hero (A)
-      if(value == "A") _ = index;
+      if(value == "A"){ _ = index; }
 
       // Map (0-9)
-      else if(value < 10) M[index] = value;
+      else if(value < 10){ M[index] = value; }
 
       // Objects (a-f)
-      else O[index] = value.charCodeAt()-97;
+      else O[index] = value.charCodeAt()-96;
     }
 
     // Draw map
@@ -196,7 +196,7 @@ l = (
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
 
     // Draw hero
-    if(_ == index) c.fillText([..."🚶💀"][D], -27, 14);
+    if(_ == index){ c.fillText([..."🚶💀"][D], -27, 14); }
 
     // reset canvas context
     c.restore();
@@ -222,7 +222,7 @@ onkeydown = (
   else if(e.key == "l"){ evalprompt(); }
 
   // Arrow key pressed: move hero (and push objects)
-  else if(!(W+D)){
+  else if(!W && !D){
     
     // Save last move
     U.push([[...M], [...O], _]);
@@ -235,14 +235,10 @@ onkeydown = (
       j = _ + dir * ++t;
 
       // If out of bounds: stop
-      if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){
-        break;
-      }
+      if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){ break; }
 
       // If there's a solid map item (map > 4): stop
-      if(M[j] > 4){
-        break;
-      }
+      if(M[j] > 4){ break; }
 
       // If we find an empty cell (any other map item + no object): move
       else if(O[j] == 0){
@@ -280,14 +276,10 @@ onkeydown = (
               if(!((j%S[p]) == 0 && k == -1 || (j%S[p]) == S[p]-1 && k == 1)){
 
                 // Kill goblins / dragons (obj < 6)
-                if(O[n] && O[n] < 6){
-                  F.push(n);
-                }
+                if(O[n] && O[n] < 6){ F.push(n); }
 
                 // Kill hero
-                if(n == _){
-                  D = 1;
-                }
+                if(n == _){ D = 1; }
               }
             }
           }
@@ -305,14 +297,10 @@ onkeydown = (
               n = +j + dirs[O[j]-1] * ++t;
 
               // Stay in bounds
-              if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){
-                break;
-              }
+              if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){ break; }
 
               // Stop on solid tiles (map > 4) or crystal (obj = 6)
-              if(M[n] > 4 || O[n] == 6){
-                break;
-              }
+              if(M[n] > 4 || O[n] == 6){ break; }
 
               // Destroy other enemies (obj = 1-5)
               if(O[n] && O[n] < 6){
@@ -330,18 +318,12 @@ onkeydown = (
         }
 
         // If hero's alive and his new cell is an exit: win
-        if(M[_] == 1 && !D){
-
-          // Win
-          W = 1;
-        }
+        if(M[_] == 1 && !D){ W = 1; }
 
         // Check if all toggle buttons are pressed (by enemies or the hero)
         Y = 1;
         for(j in M){
-          if(M[j] == 2 && (O[j] == 0 && !(_ == j))){
-            Y = 0;
-          }
+          if(M[j] == 2 && (!O[j] && !(_ == j))){ Y = 0; }
         }
 
         // Toggle orange obstacles accordingly
@@ -359,18 +341,14 @@ onkeydown = (
               if(O[j]){
 
                 // Remove an enemy
-                if(O[j] < 6){
-                  E--;
-                }
+                if(O[j] < 6){ E--; }
 
                 // Remove any object (enemy or crystal)
                 O[j] = 0;
               }
 
               // Kill hero
-              if(_ == j){
-                D = 1;
-              }
+              if(_ == j){ D = 1; }
             }
           }
         }
@@ -386,14 +364,12 @@ onkeydown = (
         // If there are no living enemies, clear enemies obstacles
         if(!E){
           for(j in M){
-            if(M[j] == 8) M[j] = 4;
+            if(M[j] == 8){ M[j] = 4; }
           }
         }
 
         // Auto play next level after a win
-        if(W){
-          setTimeout("l(++p)", 500);
-        }
+        if(W){ setTimeout("l(++p)", 500); }
 
         // Stop loop after 1 move done
         break;
@@ -405,7 +381,7 @@ onkeydown = (
   l();
   
   // If no move was done: remove last undo
-  if(!m) U.pop();
+  if(!m){ U.pop(); }
 }
 
 // Canvas2D
