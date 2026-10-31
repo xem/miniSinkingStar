@@ -63,7 +63,7 @@ evalprompt = () => eval(prompt("custom level"));
 // A: hero
 
 // Puzzles
-_ = P = [
+P = [
 
 // 0: push 1 crystal
 "0f00"+
@@ -156,11 +156,11 @@ l = ( parse ) => {
     M = [];   // map
     O = [];   // objects
     U = [];   // undo history
-    W =       // win
-    D =       // die
+    W =       // win (1: win, -1: die)
     Y =       // yellow buttons state
     E = 0;    // enemy counter
     m = 1;    // have we moved
+    _ = -1;   // hero
   }
 
   // Loop on all the map
@@ -194,7 +194,7 @@ l = ( parse ) => {
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
 
     // Draw hero
-    if(_ == index){ c.fillText([..."🚶💀"][D], -27, 14); }
+    if(_ == index){ c.fillText(W < 0 ? "💀" : "🚶", -27, 14); }
 
     // reset canvas context
     c.restore();
@@ -214,13 +214,13 @@ onkeydown = (
   if(e.key == "r"){ l(1); }
 
   // Z = undo and cancel death if we're dead
-  else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(D = 0, m = 1); }
+  else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(W = 0, m = 1); }
 
   // Load custom level/code
   else if(e.key == "l"){ evalprompt(); }
 
   // Arrow key pressed: move hero (and push objects)
-  else if(!W && !D){
+  else if(!W){
     
     // Save last move
     U.push([[...M], [...O], _]);
@@ -277,7 +277,7 @@ onkeydown = (
                 if(O[n] && O[n] < 6){ F.push(n); }
 
                 // Kill hero
-                if(n == _){ D = 1; }
+                if(n == _){ W--; }
               }
             }
           }
@@ -308,7 +308,7 @@ onkeydown = (
 
               // Kill hero
               if(n == _){
-                D = 1;
+                W--;
                 break;
               }
             }
@@ -316,7 +316,7 @@ onkeydown = (
         }
 
         // If hero's alive and his new cell is an exit: win
-        if(M[_] == 1 && !D){ W = 1; }
+        if(M[_] == 1 && !W){ W++; }
 
         // Check if all toggle buttons are pressed (by enemies or the hero)
         Y = 1;
@@ -346,7 +346,7 @@ onkeydown = (
               }
 
               // Kill hero
-              if(_ == j){ D = 1; }
+              if(_ == j){ W--; }
             }
           }
         }
@@ -367,7 +367,7 @@ onkeydown = (
         }
 
         // Auto play next level after a win
-        if(W){ setTimeout("l(++p)", 500); }
+        if(W == 1){ setTimeout("l(++p)", 500); }
 
         // Stop loop after 1 move done
         break;
