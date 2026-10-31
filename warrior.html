@@ -142,14 +142,13 @@ P = [
 // Puzzles sizes
 S = [4,9,5,5,5,6,5,4,7,7,11];
 
-// Level parsing / rendering
-l = (
-  parse  // 1: parse and draw / 0: draw only
-) => {
+// Level parsing / rendering 
+// Param: 1: parse + draw / 0: draw only
+l = ( parse ) => { 
 
   // Set up canvas
   a.width = S[p] * 50;
-  a.height = [...P[p]].length/S[p] * 50;
+  a.height = P[p].length/S[p] * 50;
   c.font = "1cm a";
 
   // Globals
