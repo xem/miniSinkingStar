@@ -69,7 +69,7 @@ render = (all = 0) => {
     if(i == 3 || i == 4){ c.globalAlpha = .25; }
     c.save();
     c.translate(i*30+13,17);
-    c.rotate(1.57 * "0123"[i-10]);
+    c.rotate(1.6 * "0123"[i-10]);
     c.fillText([..." 🟩🟨🟧🟪❌🌳🟧🟪🧱🐉🐉🐉🐉🧌🪨🚶"][i], -11, 5);
     c.restore();
   }

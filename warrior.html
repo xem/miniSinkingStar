@@ -63,7 +63,7 @@ evalprompt = () => eval(prompt("custom level"));
 // A: hero
 
 // Puzzles
-P = [
+_ = P = [
 
 // 0: push 1 crystal
 "0f00"+
@@ -161,7 +161,6 @@ l = ( parse ) => {
     Y =       // yellow buttons state
     E = 0;    // enemy counter
     m = 1;    // have we moved
-    _ = -1;   // hero
   }
 
   // Loop on all the map
@@ -191,7 +190,7 @@ l = ( parse ) => {
     c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[index]], -27, 14);
 
     // Draw objects
-    c.rotate(1.57 * "00123"[O[index]]);
+    c.rotate(1.6 * "00123"[O[index]]);
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
 
     // Draw hero
