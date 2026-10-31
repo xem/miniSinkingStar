@@ -30,7 +30,7 @@
 <button onclick="l(p=8)">9</button>
 <button onclick="l(p=9)">10</button>
 <button onclick="l(p=10)">11</button>
-<button onclick="eval(prompt('ASCII level', ''))">Load custom level</button>
+<button onclick="eval(prompt('Custom level', ''))">Load custom level</button>
 <style>#a{transform-origin:top left;transform:scale(.8); background: #fed}</style>
 <br>
 <br>
@@ -131,11 +131,11 @@ P = [
 
 // 10: dragons do one kill per turn
 "06006060681"+
-"00000000006"+
+"60000000006"+
 "c0e0e0e0e00"+
-"000f0f0f0A0"+
-"60000000000"+
-"00060060060"
+"600f0f0f0A0"+
+"00000000000"+
+"60060060060"
 
 ];
 
@@ -160,19 +160,19 @@ l = (
     W =       // win
     D =       // die
     Y =       // yellow buttons state
-    E = 0;      // enemy counter
-    m = 1;     // have we moved
+    E = 0;    // enemy counter
+    m = 1;    // have we moved
     _ = -1;   // hero
   }
 
   // Loop on all the map
   [...P[p]].map((value, index) => {
 
-    // Sprite position
+    // Set sprite position
     c.save();
     c.translate((index%S[p])*50+42-18, ((index/S[p])|0)*50+28);
 
-    // Parse
+    // Parse level
     if(parse){
 
       // Blank cells by default (map/opjects)
@@ -184,8 +184,8 @@ l = (
       // Map (0-9)
       else if(value < 10) M[index] = value;
 
-      // Objects (a-f) + dragon rotation
-      else O[index] = " abcdef".indexOf(value);
+      // Objects (a-f)
+      else O[index] = value.charCodeAt()-97;
     }
 
     // Draw map
@@ -206,7 +206,7 @@ l = (
 // Keyboard input
 onkeydown = (
   e,                            // event
-  dirs = [-1, -S[p], 1, S[p]],  // 4 directions (X,Y offsets)
+  dirs = [-1, -S[p], 1, S[p]],  // 4 directions (offsets)
   dir = dirs[e.keyCode - 37],   // Get arrow key direction
   F = [],                       // Fatalities list
   E = 0                         // Reset enemy counter
