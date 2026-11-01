@@ -65,7 +65,7 @@ evalprompt = () => eval(prompt("custom level"));
 // Puzzles
 P = [
 
-// 0: push 1 crystal
+// 0: push one crystal
 "0f00"+
 "A901",
 
@@ -79,25 +79,25 @@ P = [
 "2f090"+
 "A0091",
 
-// 3: goblins
+// 3: avoid goblins
 "0000e"+
 "A0000"+
 "0e901",
 
-// 4: dragons
+// 4: avoid dragons
 "10000"+
 "c0000"+
 "900e0"+
 "900f0"+
 "90b0A",
 
-// 5: kill all goblins
+// 5: kill two goblins
 "180000"+
 "990000"+
 "90e0f0"+
 "e00f0A",
 
-// 6: kill all dragons
+// 6: kill two dragons
 "18A00"+
 "99990"+
 "000a0"+
@@ -105,7 +105,7 @@ P = [
 "0c000"+
 "00000",
 
-// 7: kill dragon with button
+// 7: kill a dragon with abutton
 "A0d7"+
 "0f07"+
 "0297"+
@@ -120,7 +120,7 @@ P = [
 "8000000"+
 "1999999",
 
-// 9: kill 3 enemies
+// 9: kill 3 goblins
 "1800000"+
 "66000f0"+
 "00ffef0"+
@@ -129,7 +129,7 @@ P = [
 "0ff0000"+
 "000000A",
 
-// 10: dragons do one kill per turn
+// 10: dragons do one kill per move
 "06006060681"+
 "60000000006"+
 "c0e0e0e0e00"+
@@ -142,7 +142,7 @@ P = [
 // Puzzles sizes
 S = [4,9,5,5,5,6,5,4,7,7,11];
 
-// Level parsing / rendering 
+// Level parsing and rendering 
 // Param: 1: parse + draw / 0: draw only
 l = ( parse ) => { 
 
@@ -156,7 +156,7 @@ l = ( parse ) => {
     M = [];   // map
     O = [];   // objects
     U = [];   // undo history
-    W =       // win (1: win, -1: die)
+    W =       // win status (1: win, 0: playing, -1: die)
     Y =       // yellow buttons state
     E = 0;    // enemy counter
     m = 1;    // have we moved
@@ -177,13 +177,13 @@ l = ( parse ) => {
       M[index] = O[index] = 0;
 
       // Hero (A)
-      if(value == "A"){ _ = index; }
+      if(value == "A"){ _ = index; /*O[index] = value;*/ }
 
       // Map (0-9)
       else if(value < 10){ M[index] = value; }
 
-      // Objects (a-f)
-      else O[index] = value.charCodeAt()-96;
+      // Objects (a-f => 1-6)
+      else O[index] = value.charCodeAt() - 96;
     }
 
     // Draw map
@@ -210,16 +210,16 @@ onkeydown = (
   E = 0                         // Reset enemy counter
 ) => {
 
-  // R = reset
+  // R = reset level
   if(e.key == "r"){ l(1); }
 
-  // Z = undo and cancel death if we're dead
+  // Z = undo last move and cancel death if we're dead
   else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(W = 0, m = 1); }
 
   // Load custom level/code
   else if(e.key == "l"){ evalprompt(); }
 
-  // Arrow key pressed: move hero (and push objects)
+  // Arrow key pressed: try to move the hero (and push objects)
   else if(!W){
     
     // Save last move
@@ -233,7 +233,10 @@ onkeydown = (
       j = _ + dir * ++t;
 
       // If out of bounds: stop
-      if((dir == 1 && (j%S[p]) == 0) || (dir == -1 && (j%S[p]) == S[p]-1)){ break; }
+      if(
+        (dir == 1 && (j%S[p]) == 0)
+        || (dir == -1 && (j%S[p]) == S[p]-1)
+      ){ break; }
 
       // If there's a solid map item (map > 4): stop
       if(M[j] > 4){ break; }
@@ -248,7 +251,7 @@ onkeydown = (
           j = _ + t * dir;
 
           // Push objects away from the hero
-          O[j+dir] = O[j];
+          O[j + dir] = O[j];
         }
 
         // Move hero
@@ -268,10 +271,13 @@ onkeydown = (
             for(k of dirs){
 
               // Coordinates
-              n = +j+k;
+              n = +j + k;
 
               // Stay in bounds
-              if(!((j%S[p]) == 0 && k == -1 || (j%S[p]) == S[p]-1 && k == 1)){
+              if(!
+                ((j%S[p]) == 0 && k == -1 
+                || (j%S[p]) == S[p]-1 && k == 1)
+              ){
 
                 // Kill goblins / dragons (obj < 6)
                 if(O[n] && O[n] < 6){ F.push(n); }
@@ -292,10 +298,13 @@ onkeydown = (
             for(t in M){
 
               // Cell coordinates
-              n = +j + dirs[O[j]-1] * ++t;
+              n = +j + dirs[O[j] - 1] * ++t;
 
               // Stay in bounds
-              if((dirs[O[j]-1] == 1 && (n%S[p]) == 0) || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)){ break; }
+              if(
+                (dirs[O[j]-1] == 1 && (n%S[p]) == 0) 
+                || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)
+              ){ break; }
 
               // Stop on solid tiles (map > 4) or crystal (obj = 6)
               if(M[n] > 4 || O[n] == 6){ break; }
