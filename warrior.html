@@ -42,6 +42,8 @@ evalprompt = () => eval(prompt("custom level"));
 
 /* ===== GOLF STARTS HERE ===== */
 
+///todo: die in all goblin directions
+
 // Map:
 
 // 0: ground
@@ -65,39 +67,39 @@ evalprompt = () => eval(prompt("custom level"));
 // Puzzles
 P = [
 
-// 0: push one crystal
+// 1: push one crystal
 "0f00"+
 "A901",
 
-// 1: push multiple crystals
+// 2: push multiple crystals
 "009000900"+
 "Aff0ff001"+
 "009000900",
 
-// 2: button
+// 3: button
 "00070"+
 "2f090"+
 "A0091",
 
-// 3: avoid goblins
+// 4: avoid goblins
 "0000e"+
 "A0000"+
 "0e901",
 
-// 4: avoid dragons
+// 5: avoid dragons
 "10000"+
 "c0000"+
 "900e0"+
 "900f0"+
 "90b0A",
 
-// 5: kill two goblins
+// 6: kill two goblins
 "180000"+
 "990000"+
 "90e0f0"+
 "e00f0A",
 
-// 6: kill two dragons
+// 7: kill two dragons
 "18A00"+
 "99990"+
 "000a0"+
@@ -105,13 +107,13 @@ P = [
 "0c000"+
 "00000",
 
-// 7: kill a dragon with abutton
+// 8: kill a dragon with abutton
 "A0d7"+
 "0f07"+
 "0297"+
 "0091",
 
-// 8: kill a goblin and a dragon
+// 9: kill a goblin and a dragon
 "9000A00"+
 "9000000"+
 "90efffa"+
@@ -120,7 +122,7 @@ P = [
 "8000000"+
 "1999999",
 
-// 9: kill 3 goblins
+// 10: kill 3 goblins
 "1800000"+
 "66000f0"+
 "00ffef0"+
@@ -129,7 +131,7 @@ P = [
 "0ff0000"+
 "000000A",
 
-// 10: dragons do one kill per move
+// 11: dragons do one kill per move
 "06006060681"+
 "60000000006"+
 "c0e0e0e0e00"+
@@ -234,8 +236,8 @@ onkeydown = (
 
       // If out of bounds: stop
       if(
-        (dir == 1 && (j%S[p]) == 0)
-        || (dir == -1 && (j%S[p]) == S[p]-1)
+        (dir == 1 && (j % S[p]) == 0)
+        || (dir == -1 && (j % S[p]) == S[p] - 1)
       ){ break; }
 
       // If there's a solid map item (map > 4): stop
@@ -274,9 +276,11 @@ onkeydown = (
               n = +j + k;
 
               // Stay in bounds
-              if(!
-                ((j%S[p]) == 0 && k == -1 
-                || (j%S[p]) == S[p]-1 && k == 1)
+              if(
+                !(
+                  (k == -1 && (j % S[p]) == 0)  
+                  || (k == 1 && (j % S[p]) == S[p]-1)
+                )
               ){
 
                 // Kill goblins / dragons (obj < 6)
@@ -302,8 +306,8 @@ onkeydown = (
 
               // Stay in bounds
               if(
-                (dirs[O[j]-1] == 1 && (n%S[p]) == 0) 
-                || (dirs[O[j]-1] == -1 && (n%S[p]) == S[p]-1)
+                (dirs[O[j] - 1] == 1 && (n % S[p]) == 0) 
+                || (dirs[O[j] - 1] == -1 && (n % S[p]) == S[p] - 1)
               ){ break; }
 
               // Stop on solid tiles (map > 4) or crystal (obj = 6)
