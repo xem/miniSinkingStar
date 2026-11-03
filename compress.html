@@ -8,7 +8,7 @@
 
 <p><b>JS code</b>
 <p>
-  <input type=checkbox id=mini checked> Minify
+  <input type=checkbox id=mini checked hidden>
 </p>
 <textarea id=t rows=25 cols=80 placeholder="paste code here" style="width:95%;height:250px;font-size:8px"></textarea>
 
@@ -24,28 +24,30 @@ let minify = async () => {
   
   if(mini.checked){
     js = js.replace(/;+$/,";");
-    
-    let terser = await Terser.minify(
-      js, 
-      {
-        toplevel: true,
-        compress: {
-          passes: 5,
-          unsafe: true,
-          pure_getters: true,
+    try{
+      let terser = await Terser.minify(
+        js, 
+        {
+          toplevel: true,
+          compress: {
+            passes: 5,
+            unsafe: true,
+            pure_getters: true,
+          }
         }
-      }
-    )
+      )
 
-    js = terser.code;
-    js = js.replace(/;+$/,"");
-    t.value = js;
+      js = terser.code;
+      js = js.replace(/;+$/,"");
+      t.value = js;
+      originalBuffer = new TextEncoder().encode(js);
+      min.value = mini.checked ? originalBuffer.length : 0;
+    } catch(e){min.value = "invalid JS"; console.log(e);}
   }
   
-  const originalBuffer = new TextEncoder().encode(js);
-  const compressed = pako.gzip(originalBuffer, { level: 9 });
+  originalBuffer = new TextEncoder().encode(js);
+  compressed = pako.gzip(originalBuffer, { level: 9 });
   gz.value = compressed.length;
-  min.value = mini.checked ? originalBuffer.length : 0;
   raw.value = new TextEncoder().encode(rawjs).length;
 }
 
