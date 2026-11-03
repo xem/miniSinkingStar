@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS
-<br>Game engine: 925b (508b gzipped) / <a href="warrior.min.html">Full demo</a>: 1858b (1023b gzipped)
+<br>Game engine: 908b (495b gzipped) / <a href="warrior.min.html">Full demo</a>: 1879b (1019b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
@@ -40,26 +40,26 @@
 
 evalprompt = () => eval(prompt("custom level"));
 
-/* ===== GOLF STARTS HERE ===== */
+//todo apply modifs of map codes here and in editor
 
-///todo: die in all goblin directions
+/* ===== GOLF STARTS HERE ===== */
 
 // Map:
 
 // 0: ground
-// 1: exit
-// 2: toggle obstacle button
-// 3: toggle obstacle open
-// 4: enemies alive obstacle open
+// 1: toggle obstacle open
+// 2: enemies alive obstacle open
+// 3: exit
+// 4: toggle obstacle button
 // 5: gate
 // 6: tree
 // 7: toggle obstacle closed
 // 8: enemies alive obstacle closed
 // 9: wall
-// a: dragon left => 1
-// b: dragon up => 2
-// c: dragon right => 3
-// d: dragon down => 4
+// a: dragon up => 1
+// b: dragon right => 2
+// c: dragon down => 3
+// d: dragon left => 4
 // e: goblin => 5
 // f: crystal => 6
 // A: hero
@@ -69,61 +69,61 @@ P = [
 
 // 1: push one crystal
 "0f00"+
-"A901",
+"A903",
 
 // 2: push multiple crystals
 "009000900"+
-"Aff0ff001"+
+"Aff0ff003"+
 "009000900",
 
 // 3: button
 "00070"+
-"2f090"+
-"A0091",
+"4f090"+
+"A0093",
 
 // 4: avoid goblins
 "0000e"+
 "A0000"+
-"0e901",
+"0e903",
 
 // 5: avoid dragons
-"10000"+
-"c0000"+
+"30000"+
+"b0000"+
 "900e0"+
 "900f0"+
-"90b0A",
+"90a0A",
 
 // 6: kill two goblins
-"180000"+
+"380000"+
 "990000"+
 "90e0f0"+
 "e00f0A",
 
 // 7: kill two dragons
-"18A00"+
+"38A00"+
 "99990"+
-"000a0"+
+"000d0"+
 "00000"+
-"0c000"+
+"0b000"+
 "00000",
 
 // 8: kill a dragon with abutton
-"A0d7"+
+"A0c7"+
 "0f07"+
-"0297"+
-"0091",
+"0497"+
+"0093",
 
 // 9: kill a goblin and a dragon
 "9000A00"+
 "9000000"+
-"90efffa"+
+"90efffd"+
 "0000000"+
 "0000000"+
 "8000000"+
-"1999999",
+"3999999",
 
 // 10: kill 3 goblins
-"1800000"+
+"3800000"+
 "66000f0"+
 "00ffef0"+
 "00fef00"+
@@ -132,13 +132,12 @@ P = [
 "000000A",
 
 // 11: dragons do one kill per move
-"06006060681"+
+"06006060683"+
 "60000000006"+
-"c0e0e0e0e00"+
+"b0e0e0e0e00"+
 "600f0f0f0A0"+
 "00000000000"+
 "60060060060"
-
 ];
 
 // Puzzles sizes
@@ -179,7 +178,7 @@ l = ( parse ) => {
       M[index] = O[index] = 0;
 
       // Hero (A)
-      if(value == "A"){ _ = index; /*O[index] = value;*/ }
+      if(value == "A"){ _ = index; }
 
       // Map (0-9)
       else if(value < 10){ M[index] = value; }
@@ -189,14 +188,17 @@ l = ( parse ) => {
     }
 
     // Draw map
-    c.fillText([..." 🟩🟨   🌳🟧🟪🧱"][M[index]], -27, 14);
-
-    // Draw objects
-    c.rotate(1.6 * "0123"[O[index]-1]);
-    c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
-
+    c.save();
+    if(M[index] < 3){ c.globalAlpha = .3; }
+    c.fillText([..." 🟧🟪🟩🟨 🌳🟧🟪🧱"][M[index]], -27, 14);
+    c.restore();
+    
     // Draw hero
     if(_ == index){ c.fillText(W < 0 ? "💀" : "🚶", -27, 14); }
+
+    // Draw objects
+    if(O[index] < 5){ c.rotate(1.6 * (O[index])); }
+    c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
 
     // reset canvas context
     c.restore();
@@ -206,7 +208,7 @@ l = ( parse ) => {
 // Keyboard input
 onkeydown = (
   e,                            // event
-  dirs = [-1, -S[p], 1, S[p]],  // 4 directions (offsets)
+  dirs = [-1, -S[p], 1, S[p], -1],  // 4 directions (offsets)
   dir = dirs[e.keyCode - 37],   // Get arrow key direction
   F = [],                       // Fatalities list
   E = 0                         // Reset enemy counter
@@ -302,12 +304,12 @@ onkeydown = (
             for(t in M){
 
               // Cell coordinates
-              n = +j + dirs[O[j] - 1] * ++t;
+              n = +j + dirs[O[j]] * ++t;
 
               // Stay in bounds
               if(
-                (dirs[O[j] - 1] == 1 && (n % S[p]) == 0) 
-                || (dirs[O[j] - 1] == -1 && (n % S[p]) == S[p] - 1)
+                (dirs[O[j]] == 1 && (n % S[p]) == 0) 
+                || (dirs[O[j]] == -1 && (n % S[p]) == S[p] - 1)
               ){ break; }
 
               // Stop on solid tiles (map > 4) or crystal (obj = 6)
@@ -328,13 +330,16 @@ onkeydown = (
           }
         }
 
-        // If hero's alive and his new cell is an exit: win
-        if(M[_] == 1 && !W){ W++; }
+        // If hero's alive and his new cell is an exit: win, next level
+        if(M[_] == 3 && !W){
+          W++;
+          setTimeout("l(++p)", 500);
+        }
 
         // Check if all toggle buttons are pressed (by enemies or the hero)
         Y = 1;
         for(j in M){
-          if(M[j] == 2 && (!O[j] && !(_ == j))){ Y = 0; }
+          if(M[j] == 4 && (!O[j] && !(_ == j))){ Y = 0; }
         }
 
         // Toggle orange obstacles accordingly
@@ -342,7 +347,7 @@ onkeydown = (
         
           if(P[p][j] == 7){
           
-            M[j] = 3; // off (default)
+            M[j] = 1; // off (default)
             
             if(!Y){   // on (all buttons pressed)
             
@@ -375,12 +380,9 @@ onkeydown = (
         // If there are no living enemies, clear enemies obstacles
         if(!E){
           for(j in M){
-            if(M[j] == 8){ M[j] = 4; }
+            if(M[j] == 8){ M[j] = 2; }
           }
         }
-
-        // Auto play next level after a win
-        if(W == 1){ setTimeout("l(++p)", 500); }
 
         // Stop loop after 1 move done
         break;
