@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS
-<br>Game engine: 908b (495b gzipped) / <a href="warrior.min.html">Full demo</a>: 1879b (1019b gzipped)
+<br>Game engine: 948b (521b gzipped) / <a href="warrior.min.html">Full demo</a>: 1887b (1024b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
@@ -157,9 +157,9 @@ l = ( parse ) => {
     M = [];   // map
     O = [];   // objects
     U = [];   // undo history
-    W =       // win status (1: win, 0: playing, -1: die)
     Y =       // yellow buttons state
     E = 0;    // enemy counter
+    W =       // win status (0: die, 1: play, 2: win)
     m = 1;    // have we moved
     _ = -1;   // hero
   }
@@ -189,212 +189,216 @@ l = ( parse ) => {
 
     // Draw map
     c.save();
-    if(M[index] < 3){ c.globalAlpha = .3; }
+    if(M[index] < 3){ c.globalAlpha = .3; } // opacity 0.3 if map id < 3
     c.fillText([..." 🟧🟪🟩🟨 🌳🟧🟪🧱"][M[index]], -27, 14);
     c.restore();
     
     // Draw hero
-    if(_ == index){ c.fillText(W < 0 ? "💀" : "🚶", -27, 14); }
+    if(_ == index){ c.fillText(W ? "🚶" : "💀", -27, 14); }
 
     // Draw objects
     if(O[index] < 5){ c.rotate(1.6 * (O[index])); }
     c.fillText([..." 🐉🐉🐉🐉🧌🪨"][O[index]], -27, 14);
 
-    // reset canvas context
+    // Reset canvas context
     c.restore();
   });
 }
 
 // Keyboard input
 onkeydown = (
-  e,                            // event
-  dirs = [-1, -S[p], 1, S[p], -1],  // 4 directions (offsets)
-  dir = dirs[e.keyCode - 37],   // Get arrow key direction
-  F = [],                       // Fatalities list
-  E = 0                         // Reset enemy counter
+  e,                                // Event
+  dirs = [-1, -S[p], 1, S[p], -1],  // 4 directions (index offsets)
+  dir = dirs[e.keyCode - 37],       // Get arrow key direction
+  F = [],                           // Fatalities list
+  E = 0                             // Reset enemy counter
 ) => {
 
-  // R = reset level
-  if(e.key == "r"){ l(1); }
+  // Don't move if won or dead
+  if(W < 2){
 
-  // Z = undo last move and cancel death if we're dead
-  else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(W = 0, m = 1); }
+    // R = reset level
+    if(e.key == "r"){ l(1); }
 
-  // Load custom level/code
-  else if(e.key == "l"){ evalprompt(); }
+    // Z = undo last move and cancel death if we're dead
+    else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(W = m = 1); }
 
-  // Arrow key pressed: try to move the hero (and push objects)
-  else if(!W){
-    
-    // Save last move
-    U.push([[...M], [...O], _]);
-    m = 0;
+    // Load custom level/code
+    else if(e.key == "l"){ evalprompt(); }
 
-    // Loop on all the cells in the hero's target direction
-    for(t in M){
+    // Arrow key pressed: try to move the hero (and push objects)
+    else if(W) {
+      
+      // Save last move
+      U.push([[...M], [...O], _]);
+      m = 0;
 
-      // Cell coordinates
-      j = _ + dir * ++t;
+      // Loop on all the cells in the hero's target direction
+      for(t in M){
 
-      // If out of bounds: stop
-      if(
-        (dir == 1 && (j % S[p]) == 0)
-        || (dir == -1 && (j % S[p]) == S[p] - 1)
-      ){ break; }
+        // Cell coordinates
+        j = _ + dir * ++t;
 
-      // If there's a solid map item (map > 4): stop
-      if(M[j] > 4){ break; }
+        // If out of bounds: stop
+        if(
+          (dir == 1 && (j % S[p]) == 0)
+          || (dir == -1 && (j % S[p]) == S[p] - 1)
+        ){ break; }
 
-      // If we find an empty cell (any other map item + no object): move
-      else if(O[j] == 0){
+        // If there's a solid map item (map > 4): stop
+        if(M[j] > 4){ break; }
 
-        // Backtrack all the cells up to the hero
-        for( ; t--; ){
+        // If we find an empty cell (any other map item + no object): move
+        else if(O[j] == 0){
 
-          // Cell coordinates
-          j = _ + t * dir;
+          // Backtrack all the cells up to the hero
+          for( ; t--; ){
 
-          // Push objects away from the hero
-          O[j + dir] = O[j];
-        }
+            // Cell coordinates
+            j = _ + t * dir;
 
-        // Move hero
-        _ += dir;
-        m = 1;
+            // Push objects away from the hero
+            O[j + dir] = O[j];
+          }
 
-        // Enemies: loop on all the objects
-        for(j in M){
+          // Move hero
+          _ += dir;
+          m = 1;
 
-          // If it's a goblin
-          if(O[j] == 5){
+          // Enemies: loop on all the objects
+          for(j in M){
 
-            // Update enemy counter
-            E++;
+            // If it's a goblin
+            if(O[j] == 5){
 
-            // Watch in 4 directions
-            for(k of dirs){
+              // Update enemy counter
+              E++;
 
-              // Coordinates
-              n = +j + k;
+              // Watch in 4 directions
+              for(k of dirs){
 
-              // Stay in bounds
-              if(
-                !(
-                  (k == -1 && (j % S[p]) == 0)  
-                  || (k == 1 && (j % S[p]) == S[p]-1)
-                )
-              ){
+                // Coordinates
+                n = +j + k;
 
-                // Kill goblins / dragons (obj < 6)
-                if(O[n] && O[n] < 6){ F.push(n); }
+                // Stay in bounds
+                if(
+                  !(
+                    (k == -1 && (j % S[p]) == 0)  
+                    || (k == 1 && (j % S[p]) == S[p]-1)
+                  )
+                ){
+
+                  // Kill goblins / dragons (obj < 6)
+                  if(O[n] && O[n] < 6){ F.push(n); }
+
+                  // Kill hero
+                  if(n == _){ W = 0; }
+                }
+              }
+            }
+
+            // If it's a dragon
+            if(O[j] && O[j] < 5){
+
+              // Update enemy counter
+              E++;
+
+              // Loop on all the cells in the dragon's direction
+              for(t in M){
+
+                // Cell coordinates
+                n = +j + dirs[O[j]] * ++t;
+
+                // Stay in bounds
+                if(
+                  (dirs[O[j]] == 1 && (n % S[p]) == 0) 
+                  || (dirs[O[j]] == -1 && (n % S[p]) == S[p] - 1)
+                ){ break; }
+
+                // Stop on solid tiles (map > 4) or crystal (obj = 6)
+                if(M[n] > 4 || O[n] == 6){ break; }
+
+                // Destroy other enemies (obj = 1-5)
+                if(O[n] && O[n] < 6){
+                  F.push(n);
+                  break;
+                }
 
                 // Kill hero
-                if(n == _){ W--; }
+                if(n == _){
+                  W = 0;
+                  break;
+                }
               }
             }
           }
 
-          // If it's a dragon
-          if(O[j] && O[j] < 5){
-
-            // Update enemy counter
-            E++;
-
-            // Loop on all the cells in the dragon's direction
-            for(t in M){
-
-              // Cell coordinates
-              n = +j + dirs[O[j]] * ++t;
-
-              // Stay in bounds
-              if(
-                (dirs[O[j]] == 1 && (n % S[p]) == 0) 
-                || (dirs[O[j]] == -1 && (n % S[p]) == S[p] - 1)
-              ){ break; }
-
-              // Stop on solid tiles (map > 4) or crystal (obj = 6)
-              if(M[n] > 4 || O[n] == 6){ break; }
-
-              // Destroy other enemies (obj = 1-5)
-              if(O[n] && O[n] < 6){
-                F.push(n);
-                break;
-              }
-
-              // Kill hero
-              if(n == _){
-                W--;
-                break;
-              }
-            }
+          // If hero's alive and his new cell is an exit: win, next level
+          if(M[_] == 3 && W){
+            W = 2;
+            setTimeout("l(++p)", 500);
           }
-        }
 
-        // If hero's alive and his new cell is an exit: win, next level
-        if(M[_] == 3 && !W){
-          W++;
-          setTimeout("l(++p)", 500);
-        }
-
-        // Check if all toggle buttons are pressed (by enemies or the hero)
-        Y = 1;
-        for(j in M){
-          if(M[j] == 4 && (!O[j] && !(_ == j))){ Y = 0; }
-        }
-
-        // Toggle orange obstacles accordingly
-        for(j in M){
-        
-          if(P[p][j] == 7){
-          
-            M[j] = 1; // off (default)
-            
-            if(!Y){   // on (all buttons pressed)
-            
-              M[j] = 7;
-
-              // Destroy objects in the way when the obstacle appears
-              if(O[j]){
-
-                // Remove an enemy
-                if(O[j] < 6){ E--; }
-
-                // Remove any object (enemy or crystal)
-                O[j] = 0;
-              }
-
-              // Kill hero
-              if(_ == j){ W--; }
-            }
-          }
-        }
-
-        // Apply enemies fatalities
-        for(j of F){
-          if(O[j]){
-            E--;
-            O[j] = 0;
-          }
-        }
-
-        // If there are no living enemies, clear enemies obstacles
-        if(!E){
+          // Check if all toggle buttons are pressed (by enemies or the hero)
+          Y = 1;
           for(j in M){
-            if(M[j] == 8){ M[j] = 2; }
+            if(M[j] == 4 && (!O[j] && !(_ == j))){ Y = 0; }
           }
-        }
 
-        // Stop loop after 1 move done
-        break;
+          // Toggle orange obstacles accordingly
+          for(j in M){
+          
+            if(P[p][j] == 7){
+            
+              M[j] = 1; // off (default)
+              
+              if(!Y){   // on (all buttons pressed)
+              
+                M[j] = 7;
+
+                // Destroy objects in the way when the obstacle appears
+                if(O[j]){
+
+                  // Remove an enemy
+                  if(O[j] < 6){ E--; }
+
+                  // Remove any object (enemy or crystal)
+                  O[j] = 0;
+                }
+
+                // Kill hero
+                if(_ == j){ W = 0; }
+              }
+            }
+          }
+
+          // Apply enemies fatalities
+          for(j of F){
+            if(O[j]){
+              E--;
+              O[j] = 0;
+            }
+          }
+
+          // If there are no living enemies, clear enemies obstacles
+          if(!E){
+            for(j in M){
+              if(M[j] == 8){ M[j] = 2; }
+            }
+          }
+
+          // Stop loop after 1 move done
+          break;
+        }
       }
     }
-  }
 
-  // Render
-  l();
-  
-  // If no move was done: remove last undo
-  if(!m){ U.pop(); }
+    // Render
+    l();
+    
+    // If no move was done: remove last undo
+    if(!m){ U.pop(); }
+  }
 }
 
 // Canvas2D
