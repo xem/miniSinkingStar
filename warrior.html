@@ -3,7 +3,7 @@
 <a href="index.html" style="float:right;color:#000;text-decoration:none">☰</a>
 <h3>MiniSinkingStar - Warrior</h3>
 <p>Tiny "Sinking Star Wizard" implementation in HTML+JS
-<br>Game engine: 948b (521b gzipped) / <a href="warrior.min.html">Full demo</a>: 1887b (1024b gzipped)
+<br>Game engine: 918b (499b gzipped) / <a href="warrior.min.html">Full demo</a>: 1887b (1020b gzipped)
 <br>Play with arrow keys / Z to undo / R to reset / L to load a <a href="editor.html">custom level</a>
 
 <p>
@@ -39,8 +39,6 @@
 <script>
 
 evalprompt = () => eval(prompt("custom level"));
-
-//todo apply modifs of map codes here and in editor
 
 /* ===== GOLF STARTS HERE ===== */
 
@@ -107,11 +105,11 @@ P = [
 "0b000"+
 "00000",
 
-// 8: kill a dragon with abutton
-"A0c7"+
-"0f07"+
-"0497"+
-"0093",
+// 8: kill a dragon with a button + multiple buttons
+"400c7"+
+"f0f07"+
+"00497"+
+"A0093",
 
 // 9: kill a goblin and a dragon
 "9000A00"+
@@ -141,7 +139,7 @@ P = [
 ];
 
 // Puzzles sizes
-S = [4,9,5,5,5,6,5,4,7,7,11];
+S = [4,9,5,5,5,6,5,5,7,7,11];
 
 // Level parsing and rendering 
 // Param: 1: parse + draw / 0: draw only
@@ -158,10 +156,9 @@ l = ( parse ) => {
     O = [];   // objects
     U = [];   // undo history
     Y =       // yellow buttons state
-    E = 0;    // enemy counter
     W =       // win status (0: die, 1: play, 2: win)
     m = 1;    // have we moved
-    _ = -1;   // hero
+    _ = -1;   // hero position
   }
 
   // Loop on all the map
@@ -340,9 +337,9 @@ onkeydown = (
           }
 
           // Check if all toggle buttons are pressed (by enemies or the hero)
-          Y = 1;
+          Y = 0;
           for(j in M){
-            if(M[j] == 4 && (!O[j] && !(_ == j))){ Y = 0; }
+            if(M[j] == 4 && (!O[j] && !(_ == j))){ Y = 1; }
           }
 
           // Toggle orange obstacles accordingly
@@ -352,7 +349,7 @@ onkeydown = (
             
               M[j] = 1; // off (default)
               
-              if(!Y){   // on (all buttons pressed)
+              if(Y){    // on (all buttons pressed)
               
                 M[j] = 7;
 
