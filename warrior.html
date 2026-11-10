@@ -13,13 +13,13 @@
 <br>- You can push the crystals and the monsters
 <br>- Goblins kill creatures around them (not in diagonal)
 <br>- Dragons kill creatures placed in front of them (once per hero step)
-<br>- Yellow buttons toggle orange obstacles (they can destroy objects)
-<br>- Purple obstacles disappear when all the monsters are neutralized
+<br>- Yellow buttons toggle orange walls (which can destroy things when reappearing)
+<br>- Purple obstacles disappear when all the monsters are neutralized (killed or transformed)
 </details>
 
 <p><b>Demo</b>
 <p>
-<button onclick="p=0,l(1)">1</button>
+<button onclick="p=0,l(1)">Level 1</button>
 <button onclick="l(p=1)">2</button>
 <button onclick="l(p=2)">3</button>
 <button onclick="l(p=3)">4</button>
@@ -158,13 +158,13 @@ l = ( parse ) => {
     Y =       // yellow buttons state (-1: pressed / 0: not pressed)
     W =       // win status (-1: play, 0: die, 1: win)
     m =       // have we moved (-1: yes, 0: no)
-    _ = -1;   // hero position
+    _ = -1;   // hero position (-1: undefined)
   }
 
   // Loop on all the map
   [...P[p]].map((value, index) => {
 
-    // Set sprite position
+    // Go to cell position
     c.save();
     c.translate((index % S[p]) * 50 + 27, ((index / S[p]) | 0) * 50 + 27);
 
@@ -211,7 +211,7 @@ onkeydown = (
   E = 0                             // Reset enemy counter
 ) => {
 
-  // Don't move if won or dead
+  // Don't move if already won
   if(W < 1){
 
     // R = reset level
@@ -245,7 +245,8 @@ onkeydown = (
         // If there's a solid map item (map > 4): stop
         if(M[j] > 4){ break; }
 
-        // If we find an empty cell (any other map item + no object): move
+        // If we find an empty cell (any other map item + no object): 
+        // move hero and check all the game mechanics
         else if(O[j] == 0){
 
           // Backtrack all the cells up to the hero
@@ -335,6 +336,14 @@ onkeydown = (
             W = 1;
             setTimeout("l(++p)", 500);
           }
+          
+          // Apply enemies fatalities
+          for(j of F){
+            if(O[j]){
+              E--;
+              O[j] = 0;
+            }
+          }
 
           // Check if all toggle buttons are pressed (by enemies or the hero)
           Y = 0;
@@ -369,13 +378,7 @@ onkeydown = (
             }
           }
 
-          // Apply enemies fatalities
-          for(j of F){
-            if(O[j]){
-              E--;
-              O[j] = 0;
-            }
-          }
+          
 
           // If there are no living enemies, clear enemies obstacles
           if(!E){
@@ -393,7 +396,7 @@ onkeydown = (
     // Render
     l();
     
-    // If no move was done: remove last undo
+    // If no move was done: remove last undo history item
     if(!m){ U.pop(); }
   }
 }
