@@ -239,26 +239,26 @@ onkeydown = (
       for(t in M){
 
         // Cell coordinates
-        j = _ + dir * ++t;
+        z = _ + dir * ++t;
 
         // If out of bounds: stop
-        if(B(j, dir) || M[j] > 4){ break; }
+        if(B(z, dir) || M[z] > 4){ break; }
 
         // If there's a solid map item (map > 4): stop
-        if(M[j] > 4){ break; }
+        if(M[z] > 4){ break; }
 
         // If we find an empty cell (any other map item + no object): 
         // move hero and check all the game mechanics
-        else if(O[j] == 0){
+        else if(O[z] == 0){
 
           // Backtrack all the cells up to the hero
           for( ; t--; ){
 
             // Cell coordinates
-            j = _ + t * dir;
+            z = _ + t * dir;
 
             // Push objects away from the hero
-            O[j + dir] = O[j];
+            O[z + dir] = O[z];
           }
 
           // Move hero
@@ -275,19 +275,19 @@ onkeydown = (
               E++;
 
               // Watch in 4 directions
-              for(k of dirs){
+              for(dir of dirs){
 
                 // Coordinates
-                n = +j + k;
+                z = +j + dir;
 
                 // Stay in bounds
-                if(!B(n,k)){
+                if(!B(z, dir)){
 
                   // Kill goblins / dragons (obj < 6)
-                  if(O[n] && O[n] < 6){ F.push(n); }
+                  if(O[z] && O[z] < 6){ F.push(z); }
 
                   // Kill hero
-                  if(n == _){ W = 0; }
+                  if(z == _){ W = 0; }
                 }
               }
             }
@@ -302,20 +302,21 @@ onkeydown = (
               for(t in M){
 
                 // Cell coordinates
-                n = +j + dirs[O[j]] * ++t;
+                dir = dirs[O[j]];
+                z = +j + dir * ++t;
 
                 // Stay in bounds, don't hit solid tiles (map > 4) or another objects (obj > 0)
-                if(B(n, dirs[O[j]]) || M[n] > 4 || O[n]){
+                if(B(z, dir) || M[z] > 4 || O[z]){
 
                   // Destroy other enemies (obj = 1-5)
-                  if(O[n] < 6){ F.push(n); }
+                  if(O[z] < 6){ F.push(z); }
 
                   // stop
                   break;
                 }
                 
                 // Kill hero
-                if(n == _){ W = 0; }
+                if(z == _){ W = 0; }
               }
             }
           }
