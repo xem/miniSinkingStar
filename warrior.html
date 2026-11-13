@@ -218,16 +218,18 @@ onkeydown = (
   if(W < 1){
 
     // R = reset level
-    if(e.key == "r"){ l(1); }
+    e.key == "r" ? l(1)
 
     // Z = undo last move and cancel death if we're dead
-    else if(e.key == "z" && U[0]){ [M, O, _] = U.pop(W = m = -1); }
+    : (e.key == "z" && U[0]) ? [M, O, _] = U.pop(W = m = -1)
 
     // Load custom level/code
-    else if(e.key == "l"){ evalprompt(); }
+    : (e.key == "l") ? evalprompt()
+    
+    : 0;
 
     // Arrow key pressed: try to move the hero (and push objects) if not dead
-    else if(W){
+    if(W){
       
       // Save last move
       U.push([[...M], [...O], _]);
