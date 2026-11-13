@@ -60,7 +60,7 @@ evalprompt = () => eval(prompt("custom level"));
 // d: dragon left => obj 4
 // e: goblin => obj 5
 // f: crystal => obj 6
-// A: hero
+// A: hero => _
 
 // Puzzles
 P = [
@@ -156,7 +156,7 @@ l = ( parse ) => {
     O = [];   // objects
     U = [];   // undo history
     Y =       // yellow buttons state (-1: pressed / 0: not pressed)
-    W =       // win status (-1: play, 0: die, 1: win)
+    W =       // hero status (-1: playing, 0: dead, > 0 : won)
     m =       // have we moved (-1: yes, 0: no)
     _ = -1;   // hero position (-1: undefined)
   }
@@ -174,14 +174,14 @@ l = ( parse ) => {
       // Blank cells by default (map / objects)
       M[index] = O[index] = 0;
 
-      // Hero (A)
+      // Hero (A => _)
       if(value == "A"){ _ = index; }
 
       // Map (0-9)
       else if(value < 10){ M[index] = value; }
 
       // Objects (a-f => 1-6)
-      else O[index] = value.charCodeAt() - 96;
+      else O[index] = "0x" + value - 9;
     }
 
     // Draw map (set opacity to 0.3 if map id < 3)
@@ -202,16 +202,19 @@ l = ( parse ) => {
   });
 }
 
+// Detect out-of-bounds when going left (dir = -1) or right (dir = 1)
+B = (pos, dir) => 1 == dir && !(pos % S[p]) || -1 == dir && !((pos + 1) % S[p]);
+
 // Keyboard input
 onkeydown = (
   e,                                // Event
   dirs = [-1, -S[p], 1, S[p], -1],  // 4 directions (index offsets)
-  dir = dirs[e.keyCode - 37],       // Get arrow key direction
+  dir = dirs[e.which - 37],         // Get arrow key direction
   F = [],                           // Fatalities list
   E = 0                             // Reset enemy counter
 ) => {
 
-  // Don't move if already won
+  // Don't move/reset/undo if we already won
   if(W < 1){
 
     // R = reset level
@@ -237,10 +240,7 @@ onkeydown = (
         j = _ + dir * ++t;
 
         // If out of bounds: stop
-        if(
-          (dir == 1 && (j % S[p]) == 0)
-          || (dir == -1 && (j % S[p]) == S[p] - 1)
-        ){ break; }
+        if(B(j, dir) || M[j] > 4){ break; }
 
         // If there's a solid map item (map > 4): stop
         if(M[j] > 4){ break; }
@@ -279,12 +279,7 @@ onkeydown = (
                 n = +j + k;
 
                 // Stay in bounds
-                if(
-                  !(
-                    (k == -1 && (j % S[p]) == 0)  
-                    || (k == 1 && (j % S[p]) == S[p]-1)
-                  )
-                ){
+                if(!B(n,k)){
 
                   // Kill goblins / dragons (obj < 6)
                   if(O[n] && O[n] < 6){ F.push(n); }
@@ -307,35 +302,24 @@ onkeydown = (
                 // Cell coordinates
                 n = +j + dirs[O[j]] * ++t;
 
-                // Stay in bounds
-                if(
-                  (dirs[O[j]] == 1 && (n % S[p]) == 0) 
-                  || (dirs[O[j]] == -1 && (n % S[p]) == S[p] - 1)
-                ){ break; }
+                // Stay in bounds, don't hit solid tiles (map > 4) or another objects (obj > 0)
+                if(B(n, dirs[O[j]]) || M[n] > 4 || O[n]){
 
-                // Stop on solid tiles (map > 4) or crystal (obj = 6)
-                if(M[n] > 4 || O[n] == 6){ break; }
+                  // Destroy other enemies (obj = 1-5)
+                  if(O[n] < 6){ F.push(n); }
 
-                // Destroy other enemies (obj = 1-5)
-                if(O[n] && O[n] < 6){
-                  F.push(n);
+                  // stop
                   break;
                 }
-
+                
                 // Kill hero
-                if(n == _){
-                  W = 0;
-                  break;
-                }
+                if(n == _){ W = 0; }
               }
             }
           }
 
           // If hero's alive and his new cell is an exit: win, next level
-          if(M[_] == 3 && W){
-            W = 1;
-            setTimeout("l(++p)", 500);
-          }
+          if(M[_] == 3 && W){ setTimeout("l(++p)", W = 500); }
           
           // Apply enemies fatalities
           for(j of F){
@@ -377,8 +361,6 @@ onkeydown = (
               }
             }
           }
-
-          
 
           // If there are no living enemies, clear enemies obstacles
           if(!E){
