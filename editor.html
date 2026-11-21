@@ -12,10 +12,11 @@
 <p>(It's possible to add custom code just before l(1))
 <script>
 // 0: ground
-// 1: exit
-// 2: toggle obstacle button
-// 3: toggle obstacle open
-// 4: enemies alive obstacle open
+// 1: toggle obstacle open
+// 2: enemies alive obstacle open
+// 3: exit
+// 4: toggle obstacle button
+// 5: gate
 // 6: tree
 // 7: toggle obstacle closed
 // 8: enemies alive obstacle closed
@@ -67,11 +68,11 @@ render = (all = 0) => {
   c.fillRect(0,0,999,30);
   for(i = 0; i <= 16; i++){
     c.globalAlpha = 1;
-    if(i == 3 || i == 4){ c.globalAlpha = .25; }
+    if(i == 1 || i == 2){ c.globalAlpha = .25; }
     c.save();
     c.translate(i*30+13,17);
     c.rotate(1.6 * "1230"[i-10]);
-    c.fillText([..." 🟩🟨🟧🟪❌🌳🟧🟪🧱🐉🐉🐉🐉🧌🪨🚶"][i], -11, 5);
+    c.fillText([..." 🟧🟪🟩🟨❌🌳🟧🟪🧱🐉🐉🐉🐉🧌🪨🚶"][i], -11, 5);
     c.restore();
   }
 }
